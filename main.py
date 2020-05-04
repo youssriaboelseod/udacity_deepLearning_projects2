@@ -98,18 +98,15 @@ def VGG16_predict(img_path):
     '''
     Use pre-trained VGG-16 model to obtain index corresponding to 
     predicted ImageNet class for image at specified path
-    
     Args:
         img_path: path to an image
-        
     Returns:
         Index corresponding to VGG-16 model's prediction
     '''
-    
+
     ## TODO: Complete the function.
     ## Load and pre-process an image from the given img_path
-    # 1: Input is an color image which is passed through convolution layers and pooling layers.
-    
+    ## Return the *index* of the predicted class for that image
     image = Image.open(img_path).convert('RGB')
     #transform image to tensor to feed into the vgg16 model
 
@@ -117,7 +114,7 @@ def VGG16_predict(img_path):
     #resize all images to 250 h and w
     transformation = transforms.Compose([transforms.RandomResizedCrop(224),
                                          transforms.ToTensor()])
-    
+
     img_tensor = transformation(image)
     img_tensor = img_tensor.unsqueeze(0)
 
@@ -126,22 +123,22 @@ def VGG16_predict(img_path):
                         transforms.Resize(224),
                         transforms.ToTensor(),
                         transforms.Normalize((0.485, 0.456, 0.406),(0.229, 0.224, 0.225))])
-    
+
     #img_tensor = in_transform(image)[:3,:,:].unsqueeze(0)
     img_tensor = in_transform(image)
     #if torch.cuda.is_available():
     img_tensor = img_tensor.cuda()
-    
+
     prediction = VGG16(img_tensor.unsqueeze(0))
-    
+
     #cpu processing
     #if torch.cuda.is_available():
     #    prediction = prediction.cpu()
-    
+
     index = prediction.data.numpy().argmax()
-    
+
     return index # predicted class index
- # predicted class index
+ 
     ### returns "True" if a dog is detected in the image stored at img_path
 def dog_detector(img_path):
     ## TODO: Complete the function.
@@ -159,6 +156,5 @@ for D in range(len(dog_files_short)):
         dog_files_short_numbers+=H
 percentage_dog_files_short=dog_files_short_numbers/len(dog_files_short)
 print("percentage of the first 100 images in dog_files is",percentage_dog_files_short,"% have a detected dog face")
-
 
 #Step 3: Create a CNN to Classify Dog Breeds (from Scratch)
