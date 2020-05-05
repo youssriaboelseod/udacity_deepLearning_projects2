@@ -133,7 +133,7 @@ def VGG16_predict(img_path):
 
     #cpu processing
     #if torch.cuda.is_available():
-    #    prediction = prediction.cpu()
+    prediction = prediction.cpu()
 
     index = prediction.data.numpy().argmax()
 
