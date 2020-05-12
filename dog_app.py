@@ -215,7 +215,7 @@ if use_cuda:
 # 
 # Before writing the function, make sure that you take the time to learn  how to appropriately pre-process tensors for pre-trained models in the [PyTorch documentation](http://pytorch.org/docs/stable/torchvision/models.html).
 
-# In[7]:
+# In[ ]:
 
 
 from PIL import Image
@@ -241,8 +241,7 @@ def VGG16_predict(img_path):
     
 
     #resize all images to 250 h and w
-    #transformation = transforms.Compose([transforms.RandomResizedCrop(224),
-    #                                     transforms.ToTensor()])
+    
     transformation = transforms.Compose([transforms.RandomResizedCrop(224),
                                          transforms.ToTensor()])
     
@@ -254,18 +253,20 @@ def VGG16_predict(img_path):
     img_tensor = transformation(image)[:3,:,:].unsqueeze(0)
     #img_tensor = img_tensor.reshape(3,224,224)
     # 2: Output of step 1 is a vector which is taken as an input for fully connected layer.
-    #print(img_tensor)
-
-    img_tensor = img_tensor.cuda()
-    with torch.no_grad():
-            VGG16.eval()
+    if torch.cuda.is_available():
+        img_tensor = img_tensor.cuda()
+        with torch.no_grad():
+                VGG16.eval()
     prediction = VGG16(img_tensor)
-
-    #cpu processing
-    #if torch.cuda.is_available():
     prediction = prediction.cpu()
 
+    #cpu processing
+    
+    if not use_cuda:         
+        prediction = prediction.cpu()
+
     index = prediction.data.numpy().argmax()
+
     return index
 
 
@@ -275,13 +276,14 @@ def VGG16_predict(img_path):
 # 
 # Use these ideas to complete the `dog_detector` function below, which returns `True` if a dog is detected in an image (and `False` if not).
 
-# In[8]:
+# In[ ]:
 
 
 ### returns "True" if a dog is detected in the image stored at img_path
 def dog_detector(img_path):
     ## TODO: Complete the function.
     img_index = VGG16_predict(img_path)
+
     return (151 <= img_index and img_index <= 268) # true/false
 
 
@@ -294,21 +296,21 @@ def dog_detector(img_path):
 # __Answer:__ 
 # 
 
-# In[9]:
+# In[ ]:
 
 
 ### TODO: Test the performance of the dog_detector function
 ### on the images in human_files_short and dog_files_short.
 human_files_short_numbers=0
 for H in range(len(human_files_short)):
-    if dog_detector(human_files_short[H]) is True:      
-        human_files_short_numbers+=1
+    human_files_short_numbers+=1
 percentage_human_files_short=human_files_short_numbers/len(human_files_short)
+print(human_files_short_numbers)
+
 print("percentage of the first 100 images in human_files is",percentage_human_files_short,"% have a detected dog face")
 dog_files_short_numbers=0
 for D in range(len(dog_files_short)):
-    if dog_detector(dog_files_short[D]) is True:      
-        dog_files_short_numbers+=1
+    dog_files_short_numbers+=1
 percentage_dog_files_short=dog_files_short_numbers/len(dog_files_short)
 print("percentage of the first 100 images in dog_files is",percentage_dog_files_short,"% have a detected dog face")
 
@@ -490,8 +492,8 @@ optimizer_scratch = torch.optim.SGD(model_scratch.parameters(), lr = 0.01)
 def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     """returns trained model"""
     # initialize tracker for minimum validation loss
-    valid_loss_min = np.Inf 
-    
+    valid_loss_min = np.Inf
+
     for epoch in range(1, n_epochs+1):
         # initialize variables to monitor training and validation loss
         train_loss = 0.0
@@ -544,14 +546,13 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
             train_loss,
             valid_loss
             ))
-        
+
         ## TODO: save the model if validation loss has decreased
         if valid_loss > train_loss:
             torch.save(model.state_dict(), save_path)
 
     # return trained model
     return model
-
 
 # train the model
 model_scratch = train(12, loaders_scratch, model_scratch, optimizer_scratch, 
@@ -776,7 +777,30 @@ class_names = [item[4:].replace("_", " ") for item in data_transfer['train'].cla
 
 def predict_breed_transfer(img_path):
     # load the image and return the predicted breed
-    return None
+    # obtain one batch of test images
+    dataiter = iter(loaders_transfer,class_names)
+    images, labels = dataiter.next()
+    images.numpy()
+
+    # move model inputs to cuda, if GPU available
+    if train_on_gpu:
+        images = images.cuda()
+
+    # get sample outputs
+    output = vgg16(images)
+    # convert output probabilities to predicted class
+    _, preds_tensor = torch.max(output, 1)
+    prediction = np.squeeze(preds_tensor.numpy()) if not train_on_gpu else np.squeeze(preds_tensor.cpu().numpy())
+
+    # plot the images in the batch, along with predicted and true labels
+    fig = plt.figure(figsize=(25, 4))
+    for idx in np.arange(20):
+        ax = fig.add_subplot(2, 20/2, idx+1, xticks=[], yticks=[])
+        plt.imshow(np.transpose(images[idx], (1, 2, 0)))
+        ax.set_title("{} ({})".format(classes[preds[idx]], classes[labels[idx]]),
+                     color=("green" if preds[idx]==labels[idx].item() else "red")
+    
+    return class_names[prediction]
 
 
 # ---

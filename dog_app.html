@@ -13459,25 +13459,6 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:05&lt;00:00, 100702922.74it/s]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13498,7 +13479,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">Image</span>
@@ -13524,8 +13505,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
     
 
     <span class="c1">#resize all images to 250 h and w</span>
-    <span class="c1">#transformation = transforms.Compose([transforms.RandomResizedCrop(224),</span>
-    <span class="c1">#                                     transforms.ToTensor()])</span>
+    
     <span class="n">transformation</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">transforms</span><span class="o">.</span><span class="n">RandomResizedCrop</span><span class="p">(</span><span class="mi">224</span><span class="p">),</span>
                                          <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()])</span>
     
@@ -13537,18 +13517,20 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
     <span class="n">img_tensor</span> <span class="o">=</span> <span class="n">transformation</span><span class="p">(</span><span class="n">image</span><span class="p">)[:</span><span class="mi">3</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1">#img_tensor = img_tensor.reshape(3,224,224)</span>
     <span class="c1"># 2: Output of step 1 is a vector which is taken as an input for fully connected layer.</span>
-    <span class="c1">#print(img_tensor)</span>
-
-    <span class="n">img_tensor</span> <span class="o">=</span> <span class="n">img_tensor</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-            <span class="n">VGG16</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">img_tensor</span> <span class="o">=</span> <span class="n">img_tensor</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">VGG16</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">VGG16</span><span class="p">(</span><span class="n">img_tensor</span><span class="p">)</span>
-
-    <span class="c1">#cpu processing</span>
-    <span class="c1">#if torch.cuda.is_available():</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
 
+    <span class="c1">#cpu processing</span>
+    
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_cuda</span><span class="p">:</span>         
+        <span class="n">prediction</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+
     <span class="n">index</span> <span class="o">=</span> <span class="n">prediction</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">argmax</span><span class="p">()</span>
+
     <span class="k">return</span> <span class="n">index</span>
 </pre></div>
 
@@ -13568,13 +13550,14 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### returns &quot;True&quot; if a dog is detected in the image stored at img_path</span>
 <span class="k">def</span> <span class="nf">dog_detector</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1">## TODO: Complete the function.</span>
     <span class="n">img_index</span> <span class="o">=</span> <span class="n">VGG16_predict</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="p">(</span><span class="mi">151</span> <span class="o">&lt;=</span> <span class="n">img_index</span> <span class="ow">and</span> <span class="n">img_index</span> <span class="o">&lt;=</span> <span class="mi">268</span><span class="p">)</span> <span class="c1"># true/false</span>
 </pre></div>
 
@@ -13605,45 +13588,26 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Test the performance of the dog_detector function</span>
 <span class="c1">### on the images in human_files_short and dog_files_short.</span>
 <span class="n">human_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
 <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">dog_detector</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">[</span><span class="n">H</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>      
-        <span class="n">human_files_short_numbers</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">human_files_short_numbers</span><span class="o">+=</span><span class="mi">1</span>
 <span class="n">percentage_human_files_short</span><span class="o">=</span><span class="n">human_files_short_numbers</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">human_files_short_numbers</span><span class="p">)</span>
+
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;percentage of the first 100 images in human_files is&quot;</span><span class="p">,</span><span class="n">percentage_human_files_short</span><span class="p">,</span><span class="s2">&quot;% have a detected dog face&quot;</span><span class="p">)</span>
 <span class="n">dog_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
 <span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">dog_detector</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">[</span><span class="n">D</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>      
-        <span class="n">dog_files_short_numbers</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">dog_files_short_numbers</span><span class="o">+=</span><span class="mi">1</span>
 <span class="n">percentage_dog_files_short</span><span class="o">=</span><span class="n">dog_files_short_numbers</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;percentage of the first 100 images in dog_files is&quot;</span><span class="p">,</span><span class="n">percentage_dog_files_short</span><span class="p">,</span><span class="s2">&quot;% have a detected dog face&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
-percentage of the first 100 images in dog_files is 0.0 % have a detected dog face
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -13922,8 +13886,8 @@ percentage of the first 100 images in dog_files is 0.0 % have a detected dog fac
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">loaders</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="n">save_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;returns trained model&quot;&quot;&quot;</span>
     <span class="c1"># initialize tracker for minimum validation loss</span>
-    <span class="n">valid_loss_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span> 
-    
+    <span class="n">valid_loss_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">Inf</span>
+
     <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
         <span class="c1"># initialize variables to monitor training and validation loss</span>
         <span class="n">train_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -13976,14 +13940,13 @@ percentage of the first 100 images in dog_files is 0.0 % have a detected dog fac
             <span class="n">train_loss</span><span class="p">,</span>
             <span class="n">valid_loss</span>
             <span class="p">))</span>
-        
+
         <span class="c1">## TODO: save the model if validation loss has decreased</span>
         <span class="k">if</span> <span class="n">valid_loss</span> <span class="o">&gt;</span> <span class="n">train_loss</span><span class="p">:</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">save_path</span><span class="p">)</span>
 
     <span class="c1"># return trained model</span>
     <span class="k">return</span> <span class="n">model</span>
-
 
 <span class="c1"># train the model</span>
 <span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
@@ -13994,6 +13957,25 @@ percentage of the first 100 images in dog_files is 0.0 % have a detected dog fac
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Epoch: 1 	Training Loss: 4.874695 	Validation Loss: 4.851823
+Epoch: 2 	Training Loss: 4.834652 	Validation Loss: 4.811523
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14292,7 +14274,30 @@ percentage of the first 100 images in dog_files is 0.0 % have a detected dog fac
 
 <span class="k">def</span> <span class="nf">predict_breed_transfer</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load the image and return the predicted breed</span>
-    <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># obtain one batch of test images</span>
+    <span class="n">dataiter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">loaders_transfer</span><span class="p">,</span><span class="n">class_names</span><span class="p">)</span>
+    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">dataiter</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="n">images</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+    <span class="c1"># move model inputs to cuda, if GPU available</span>
+    <span class="k">if</span> <span class="n">train_on_gpu</span><span class="p">:</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+    <span class="c1"># get sample outputs</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">vgg16</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+    <span class="c1"># convert output probabilities to predicted class</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">preds_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">preds_tensor</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">train_on_gpu</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">preds_tensor</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+    <span class="c1"># plot the images in the batch, along with predicted and true labels</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">]],</span> <span class="n">classes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]),</span>
+                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;green&quot;</span> <span class="k">if</span> <span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">==</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">class_names</span><span class="p">[</span><span class="n">prediction</span><span class="p">]</span>
 </pre></div>
 
     </div>
