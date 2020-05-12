@@ -56,7 +56,7 @@
 # 
 # In the code cell below, we save the file paths for both the human (LFW) dataset and dog dataset in the numpy arrays `human_files` and `dog_files`.
 
-# In[4]:
+# In[1]:
 
 
 import numpy as np
@@ -78,7 +78,7 @@ print('There are %d total dog images.' % len(dog_files))
 # 
 # OpenCV provides many pre-trained face detectors, stored as XML files on [github](https://github.com/opencv/opencv/tree/master/data/haarcascades).  We have downloaded one of these detectors and stored it in the `haarcascades` directory.  In the next code cell, we demonstrate how to use this detector to find human faces in a sample image.
 
-# In[3]:
+# In[2]:
 
 
 import cv2                
@@ -120,7 +120,7 @@ plt.show()
 # 
 # We can use this procedure to write a function that returns `True` if a human face is detected in an image and `False` otherwise.  This function, aptly named `face_detector`, takes a string-valued file path to an image as input and appears in the code block below.
 
-# In[4]:
+# In[3]:
 
 
 # returns "True" if face is detected in image stored at img_path
@@ -142,7 +142,7 @@ def face_detector(img_path):
 # __Answer:__ 
 # (You can print out your results and/or write your percentages in this cell)
 
-# In[6]:
+# In[4]:
 
 
 from tqdm import tqdm
@@ -158,21 +158,21 @@ dog_files_short = dog_files[:100]
 human_files_short_numbers=0
 for H in range(len(human_files_short)):
     if face_detector(human_files_short[H]) is True:      
-        human_files_short_numbers+=H
+        human_files_short_numbers+=1
 percentage_human_files_short=human_files_short_numbers/len(human_files_short)
 print("percentage of the first 100 images in human_files is",percentage_human_files_short,"% have a detected human face")
 
 dog_files_short_numbers=0
 for D in range(len(dog_files_short)):
-    if face_detector(dog_files_short[H]) is True:      
-        dog_files_short_numbers+=H
+    if face_detector(dog_files_short[D]) is True:      
+        dog_files_short_numbers+=1
 percentage_dog_files_short=dog_files_short_numbers/len(dog_files_short)
 print("percentage of the first 100 images in dog_files is",percentage_dog_files_short,"% have a detected human face")
 
 
 # We suggest the face detector from OpenCV as a potential way to detect human images in your algorithm, but you are free to explore other approaches, especially approaches that make use of deep learning :).  Please use the code cell below to design and test your own face detection algorithm.  If you decide to pursue this _optional_ task, report performance on `human_files_short` and `dog_files_short`.
 
-# In[ ]:
+# In[5]:
 
 
 ### (Optional) 
@@ -190,7 +190,7 @@ print("percentage of the first 100 images in dog_files is",percentage_dog_files_
 # 
 # The code cell below downloads the VGG-16 model, along with weights that have been trained on [ImageNet](http://www.image-net.org/), a very large, very popular dataset used for image classification and other vision tasks.  ImageNet contains over 10 million URLs, each linking to an image containing an object from one of [1000 categories](https://gist.github.com/yrevar/942d3a0ac09ec9e5eb3a).  
 
-# In[7]:
+# In[6]:
 
 
 import torch
@@ -215,7 +215,7 @@ if use_cuda:
 # 
 # Before writing the function, make sure that you take the time to learn  how to appropriately pre-process tensors for pre-trained models in the [PyTorch documentation](http://pytorch.org/docs/stable/torchvision/models.html).
 
-# In[2]:
+# In[7]:
 
 
 from PIL import Image
@@ -235,35 +235,38 @@ def VGG16_predict(img_path):
     ## Load and pre-process an image from the given img_path
     ## Return the *index* of the predicted class for that image
     image = Image.open(img_path).convert('RGB')
+    #image= cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB)
     #transform image to tensor to feed into the vgg16 model
+    #toTensor = transforms.ToTensor()
+    
 
-    toTensor = transforms.ToTensor()
     #resize all images to 250 h and w
+    #transformation = transforms.Compose([transforms.RandomResizedCrop(224),
+    #                                     transforms.ToTensor()])
     transformation = transforms.Compose([transforms.RandomResizedCrop(224),
                                          transforms.ToTensor()])
-    img_tensor = transformation(image)
-    img_tensor = img_tensor.unsqueeze(0)
+    
+    #transformation = transforms.Compose([
+    #                    transforms.Resize(224),
+    #                    transforms.ToTensor(),
+    #                    transforms.Normalize((0.485, 0.456, 0.406),(0.229, 0.224, 0.225))])
 
+    img_tensor = transformation(image)[:3,:,:].unsqueeze(0)
+    #img_tensor = img_tensor.reshape(3,224,224)
     # 2: Output of step 1 is a vector which is taken as an input for fully connected layer.
-    in_transform = transforms.Compose([
-                        transforms.Resize(224),
-                        transforms.ToTensor(),
-                        transforms.Normalize((0.485, 0.456, 0.406),(0.229, 0.224, 0.225))])
+    #print(img_tensor)
 
-    #img_tensor = in_transform(image)[:3,:,:].unsqueeze(0)
-    img_tensor = in_transform(image)
-    #if torch.cuda.is_available():
     img_tensor = img_tensor.cuda()
-
-    prediction = VGG16(img_tensor.unsqueeze(0))
+    with torch.no_grad():
+            VGG16.eval()
+    prediction = VGG16(img_tensor)
 
     #cpu processing
     #if torch.cuda.is_available():
     prediction = prediction.cpu()
 
     index = prediction.data.numpy().argmax()
-
-    return index # predicted class index
+    return index
 
 
 # ### (IMPLEMENTATION) Write a Dog Detector
@@ -272,7 +275,7 @@ def VGG16_predict(img_path):
 # 
 # Use these ideas to complete the `dog_detector` function below, which returns `True` if a dog is detected in an image (and `False` if not).
 
-# In[13]:
+# In[8]:
 
 
 ### returns "True" if a dog is detected in the image stored at img_path
@@ -291,7 +294,7 @@ def dog_detector(img_path):
 # __Answer:__ 
 # 
 
-# In[14]:
+# In[9]:
 
 
 ### TODO: Test the performance of the dog_detector function
@@ -299,20 +302,20 @@ def dog_detector(img_path):
 human_files_short_numbers=0
 for H in range(len(human_files_short)):
     if dog_detector(human_files_short[H]) is True:      
-        human_files_short_numbers+=H
+        human_files_short_numbers+=1
 percentage_human_files_short=human_files_short_numbers/len(human_files_short)
 print("percentage of the first 100 images in human_files is",percentage_human_files_short,"% have a detected dog face")
 dog_files_short_numbers=0
 for D in range(len(dog_files_short)):
-    if dog_detector(dog_files_short[H]) is True:      
-        dog_files_short_numbers+=H
+    if dog_detector(dog_files_short[D]) is True:      
+        dog_files_short_numbers+=1
 percentage_dog_files_short=dog_files_short_numbers/len(dog_files_short)
 print("percentage of the first 100 images in dog_files is",percentage_dog_files_short,"% have a detected dog face")
 
 
 # We suggest VGG-16 as a potential network to detect dog images in your algorithm, but you are free to explore other pre-trained networks (such as [Inception-v3](http://pytorch.org/docs/master/torchvision/models.html#inception-v3), [ResNet-50](http://pytorch.org/docs/master/torchvision/models.html#id3), etc).  Please use the code cell below to test other pre-trained PyTorch models.  If you decide to pursue this _optional_ task, report performance on `human_files_short` and `dog_files_short`.
 
-# In[7]:
+# In[10]:
 
 
 ### (Optional) 
@@ -353,14 +356,14 @@ print("percentage of the first 100 images in dog_files is",percentage_dog_files_
 # 
 # Use the code cell below to write three separate [data loaders](http://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader) for the training, validation, and test datasets of dog images (located at `dog_images/train`, `dog_images/valid`, and `dog_images/test`, respectively).  You may find [this documentation on custom datasets](http://pytorch.org/docs/stable/torchvision/datasets.html) to be a useful resource.  If you are interested in augmenting your training and/or validation data, check out the wide variety of [transforms](http://pytorch.org/docs/stable/torchvision/transforms.html?highlight=transform)!
 
-# In[27]:
+# In[11]:
 
 
 import os
 from torchvision import datasets
-#from PIL import ImageFile
+from PIL import ImageFile
 
-#ImageFile.LOAD_TRUNCATED_IMAGES = True
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 ### TODO: Write data loaders for training, validation, and test sets
 ## Specify appropriate transforms, and batch_sizes
@@ -369,9 +372,8 @@ batchSize=64
 train_transforms = transforms.Compose([transforms.Resize(224),
                                        transforms.RandomRotation(20),
                                        transforms.RandomResizedCrop(224),
-                                       transforms.RandomHorizontalFlip,
+                                        transforms.RandomHorizontalFlip(),
                                         transforms.RandomVerticalFlip(),
-
                                        transforms.ToTensor(),
                                        transforms.Normalize([0.485, 0.456, 0.406],
                                                             [0.229, 0.224, 0.225])])
@@ -382,11 +384,11 @@ test_transforms = transforms.Compose([transforms.Resize(224),
                                                             [0.229, 0.224, 0.225])])
 
 # Pass transforms in here, then run the next cell to see how the transforms look
-train_data = datasets.ImageFolder(dog_files + '/train', transform=train_transforms)
+train_data = datasets.ImageFolder('/data/dog_images' + '/train', transform=train_transforms)
 
-valid_data = datasets.ImageFolder(dog_files + '/valid', transform=test_transforms)
+valid_data = datasets.ImageFolder('/data/dog_images' + '/valid', transform=test_transforms)
 
-test_data = datasets.ImageFolder(dog_files + '/test', transform=test_transforms)
+test_data = datasets.ImageFolder('/data/dog_images' + '/test', transform=test_transforms)
 
 trainloader = torch.utils.data.DataLoader(train_data, batch_size=batchSize, shuffle=True)
 validloader = torch.utils.data.DataLoader(valid_data, batch_size=batchSize, shuffle=True)
@@ -395,9 +397,9 @@ testloader = torch.utils.data.DataLoader(test_data, batch_size=batchSize)
 
 # create dictionary for all loaders in one
 loaders_scratch = {}
-loaders_scratch['train'] = train_loader
-loaders_scratch['valid'] = validation_loader
-loaders_scratch['test'] = test_loader
+loaders_scratch['train'] = trainloader
+loaders_scratch['valid'] = validloader
+loaders_scratch['test'] = testloader
 
 
 # **Question 3:** Describe your chosen procedure for preprocessing the data. 
@@ -411,7 +413,7 @@ loaders_scratch['test'] = test_loader
 # 
 # Create a CNN to classify dog breed.  Use the template in the code cell below.
 
-# In[9]:
+# In[12]:
 
 
 import torch.nn as nn
@@ -422,10 +424,30 @@ class Net(nn.Module):
     ### TODO: choose an architecture, and complete the class
     def __init__(self):
         super(Net, self).__init__()
-        ## Define layers of a CNN
-    
+        ## Define layers of a CNN 
+            #convolutional layer
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.conv3 = nn.Conv2d(32, 64, 3, padding= 1)
+
+        #git 3 dimentions>>         (n - f + 2p )/ s + 1
+        self.fc1 = nn.Linear(64*28*28, 512)
+        self.fc2 = nn.Linear(512, 133)
+
+            # max pooling layer
+        self.pool = nn.MaxPool2d(2, 2)
+        
     def forward(self, x):
         ## Define forward behavior
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = self.pool(F.relu(self.conv3(x)))
+
+        #x = x.view(x.size(0), -1)
+        x = x.view(x.shape[0],-1)
+        x = self.fc1(x)
+        x = self.fc2(x)
+
         return x
 
 #-#-# You so NOT have to modify the code below this line. #-#-#
@@ -446,16 +468,16 @@ if use_cuda:
 # 
 # Use the next code cell to specify a [loss function](http://pytorch.org/docs/stable/nn.html#loss-functions) and [optimizer](http://pytorch.org/docs/stable/optim.html).  Save the chosen loss function as `criterion_scratch`, and the optimizer as `optimizer_scratch` below.
 
-# In[ ]:
+# In[13]:
 
 
 import torch.optim as optim
 
 ### TODO: select loss function
-criterion_scratch = None
+criterion_scratch = nn.CrossEntropyLoss()
 
 ### TODO: select optimizer
-optimizer_scratch = None
+optimizer_scratch = torch.optim.SGD(model_scratch.parameters(), lr = 0.01)
 
 
 # ### (IMPLEMENTATION) Train and Validate the Model
@@ -479,6 +501,7 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
         # train the model #
         ###################
         model.train()
+        
         for batch_idx, (data, target) in enumerate(loaders['train']):
             # move to GPU
             if use_cuda:
@@ -486,7 +509,19 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
             ## find the loss and update the model parameters accordingly
             ## record the average training loss, using something like
             ## train_loss = train_loss + ((1 / (batch_idx + 1)) * (loss.data - train_loss))
-            
+            # clear the gradients of all optimized variables
+            optimizer.zero_grad()
+            # forward pass: compute predicted outputs by passing inputs to the model
+            output = model(data)
+            # calculate the batch loss
+            loss = criterion(output, target)
+            # backward pass: compute gradient of the loss with respect to model parameters
+            loss.backward()
+            # perform a single optimization step (parameter update)
+            optimizer.step()
+            # update training loss
+            train_loss += loss.item()*data.size(0)
+        train_loss=train_loss/len(loaders['train'].dataset)
         ######################    
         # validate the model #
         ######################
@@ -496,8 +531,13 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
             if use_cuda:
                 data, target = data.cuda(), target.cuda()
             ## update the average validation loss
+            output = model(data)
+            # calculate the batch loss
+            loss = criterion(output, target)
+            # update test loss 
+            valid_loss += loss.item()*data.size(0)
 
-            
+        valid_loss=valid_loss/len(loaders['valid'].dataset)    
         # print training/validation statistics 
         print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f}'.format(
             epoch, 
@@ -506,13 +546,15 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
             ))
         
         ## TODO: save the model if validation loss has decreased
-            
+        if valid_loss > train_loss:
+            torch.save(model.state_dict(), save_path)
+
     # return trained model
     return model
 
 
 # train the model
-model_scratch = train(100, loaders_scratch, model_scratch, optimizer_scratch, 
+model_scratch = train(12, loaders_scratch, model_scratch, optimizer_scratch, 
                       criterion_scratch, use_cuda, 'model_scratch.pt')
 
 # load the model that got the best validation accuracy
@@ -575,6 +617,68 @@ test(loaders_scratch, model_scratch, criterion_scratch, use_cuda)
 
 
 ## TODO: Specify data loaders
+import numpy as np
+from glob import glob
+# load filenames for human and dog images
+human_files = np.array(glob("/data/lfw/*/*"))
+dog_files = np.array(glob("/data/dog_images/*/*/*"))
+
+human_files_short = human_files[:100]
+
+dog_files_short = dog_files[:100]
+
+
+import os
+from torchvision import datasets
+from PIL import ImageFile
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+### TODO: Write data loaders for training, validation, and test sets
+## Specify appropriate transforms, and batch_sizes
+
+batchSize=64
+
+import torch
+import torchvision.models as models
+
+import torchvision.transforms as transforms
+
+train_transforms = transforms.Compose([transforms.Resize(224),
+                                       transforms.RandomRotation(20),
+                                       transforms.RandomResizedCrop(224),
+                                        transforms.RandomHorizontalFlip(),
+                                        transforms.RandomVerticalFlip(),
+                                       transforms.ToTensor(),
+                                       transforms.Normalize([0.485, 0.456, 0.406],
+                                                            [0.229, 0.224, 0.225])])
+test_transforms = transforms.Compose([transforms.Resize(224),
+                                      transforms.CenterCrop(224),
+                                      transforms.ToTensor(),
+                                      transforms.Normalize([0.485, 0.456, 0.406],
+                                                            [0.229, 0.224, 0.225])])
+
+# Pass transforms in here, then run the next cell to see how the transforms look
+train_data = datasets.ImageFolder('/data/dog_images' + '/train', transform=train_transforms)
+
+valid_data = datasets.ImageFolder('/data/dog_images' + '/valid', transform=test_transforms)
+
+test_data = datasets.ImageFolder('/data/dog_images' + '/test', transform=test_transforms)
+
+trainloader = torch.utils.data.DataLoader(train_data, batch_size=batchSize, shuffle=True)
+validloader = torch.utils.data.DataLoader(valid_data, batch_size=batchSize, shuffle=True)
+
+testloader = torch.utils.data.DataLoader(test_data, batch_size=batchSize)
+
+# create dictionary for all loaders in one
+loaders_transfer = {}
+loaders_transfer['train'] = trainloader
+loaders_transfer['valid'] = validloader
+loaders_transfer['test'] = testloader
+
+print ("number train image" , len(train_data))
+print ("number valid image" , len(valid_data))
+print ("number test image" , len(test_data))
 
 
 # ### (IMPLEMENTATION) Model Architecture
@@ -589,9 +693,30 @@ import torch.nn as nn
 
 ## TODO: Specify model architecture 
 
+# put them in list form to compare
+model_transfer = models.vgg16(pretrained=True)
+print(model_transfer.classifier[6].in_features) 
+print(model_transfer.classifier[6].out_features) 
+
+# Freeze training for all "features" layers
+for param in model_transfer.features.parameters():
+    param.requires_grad = False
+
+n_inputs = model_transfer.classifier[6].in_features
+n_outputs=model_transfer.classifier[6].out_features
+print("in_features",n_inputs)
+print("out_features",n_outputs)
+
+# add last linear layer (n_inputs -> 5 flower classes)
+# new layers automatically have requires_grad = True
+last_layer = nn.Linear(n_inputs, 133)
+
+model_transfer.classifier[6] = last_layer
 
 if use_cuda:
-    model_transfer = model_transfer.cuda()
+    model_transfer = model_transfer.cuda
+
+print("model_transfer",model_transfer)
 
 
 # __Question 5:__ Outline the steps you took to get to your final CNN architecture and your reasoning at each step.  Describe why you think the architecture is suitable for the current problem.
@@ -606,8 +731,8 @@ if use_cuda:
 # In[ ]:
 
 
-criterion_transfer = None
-optimizer_transfer = None
+criterion_transfer = nn.CrossEntropyLoss()
+optimizer_transfer =  optim.SGD(model_transfer.classifier.parameters(), lr=0.001)
 
 
 # ### (IMPLEMENTATION) Train and Validate the Model
@@ -618,10 +743,12 @@ optimizer_transfer = None
 
 
 # train the model
-model_transfer = # train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, 'model_transfer.pt')
+model_transfer = train(8, loaders_transfer, model_transfer, optimizer_transfer, 
+                      criterion_transfer, use_cuda, 'model_transfer.pt')
+                # =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, 'model_transfer.pt')
 
 # load the model that got the best validation accuracy (uncomment the line below)
-#model_transfer.load_state_dict(torch.load('model_transfer.pt'))
+model_transfer.load_state_dict(torch.load('model_transfer.pt'))
 
 
 # ### (IMPLEMENTATION) Test the Model
