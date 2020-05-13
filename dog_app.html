@@ -13459,25 +13459,6 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:05&lt;00:00, 106358136.29it/s]
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13607,21 +13588,19 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Test the performance of the dog_detector function</span>
-<span class="c1">### on the images in human_files_short and dog_files_short.</span>
-<span class="n">human_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">human_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
 <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">dog_detector</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">[</span><span class="n">H</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>      
+    <span class="k">if</span> <span class="n">dog_detector</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">[</span><span class="n">H</span><span class="p">]):</span>      
         <span class="n">human_files_short_numbers</span><span class="o">+=</span><span class="mi">1</span>
 <span class="n">percentage_human_files_short</span><span class="o">=</span><span class="n">human_files_short_numbers</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">human_files_short</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;percentage of the first 100 images in human_files is&quot;</span><span class="p">,</span><span class="n">percentage_human_files_short</span><span class="p">,</span><span class="s2">&quot;% have a detected dog face&quot;</span><span class="p">)</span>
 <span class="n">dog_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
 <span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">dog_detector</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">[</span><span class="n">D</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>      
+    <span class="k">if</span> <span class="n">dog_detector</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">[</span><span class="n">D</span><span class="p">]):</span>      
         <span class="n">dog_files_short_numbers</span><span class="o">+=</span><span class="mi">1</span>
 <span class="n">percentage_dog_files_short</span><span class="o">=</span><span class="n">dog_files_short_numbers</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">dog_files_short</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">dog_files_short_numbers</span><span class="p">)</span>
@@ -13644,8 +13623,8 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
-0
-percentage of the first 100 images in dog_files is 0.0 % have a detected dog face
+86
+percentage of the first 100 images in dog_files is 0.86 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -13984,14 +13963,15 @@ percentage of the first 100 images in dog_files is 0.0 % have a detected dog fac
             <span class="p">))</span>
 
         <span class="c1">## TODO: save the model if validation loss has decreased</span>
-        <span class="k">if</span> <span class="n">valid_loss</span> <span class="o">&gt;</span> <span class="n">train_loss</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">valid_loss</span> <span class="o">&lt;</span> <span class="n">train_loss</span><span class="p">:</span>
             <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span> <span class="n">save_path</span><span class="p">)</span>
+            <span class="n">valid_loss_min</span> <span class="o">=</span> <span class="n">valid_loss</span>
 
     <span class="c1"># return trained model</span>
     <span class="k">return</span> <span class="n">model</span>
 
-<span class="c1"># train the model</span>
-<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
+<span class="c1"># train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy</span>
+<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
                       <span class="n">criterion_scratch</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_scratch.pt&#39;</span><span class="p">)</span>
 
 <span class="c1"># load the model that got the best validation accuracy</span>
@@ -14012,44 +13992,9 @@ percentage of the first 100 images in dog_files is 0.0 % have a detected dog fac
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.877933 	Validation Loss: 4.855241
-Epoch: 2 	Training Loss: 4.843115 	Validation Loss: 4.815304
-Epoch: 3 	Training Loss: 4.802631 	Validation Loss: 4.763139
-Epoch: 4 	Training Loss: 4.764340 	Validation Loss: 4.716846
-Epoch: 5 	Training Loss: 4.740115 	Validation Loss: 4.682583
-Epoch: 6 	Training Loss: 4.714225 	Validation Loss: 4.658500
-Epoch: 7 	Training Loss: 4.674374 	Validation Loss: 4.602744
-Epoch: 8 	Training Loss: 4.626707 	Validation Loss: 4.557297
-Epoch: 9 	Training Loss: 4.599868 	Validation Loss: 4.528253
-Epoch: 10 	Training Loss: 4.571577 	Validation Loss: 4.491776
-Epoch: 11 	Training Loss: 4.552107 	Validation Loss: 4.490050
-Epoch: 12 	Training Loss: 4.554617 	Validation Loss: 4.492529
+<pre>Epoch: 1 	Training Loss: 4.877577 	Validation Loss: 4.857086
+Epoch: 2 	Training Loss: 4.852781 	Validation Loss: 4.828055
 </pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">FileNotFoundError</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-14-aa2682faa43e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     69</span> 
-<span class="ansi-green-intense-fg ansi-bold">     70</span> <span class="ansi-red-fg"># load the model that got the best validation accuracy</span>
-<span class="ansi-green-fg">---&gt; 71</span><span class="ansi-red-fg"> </span>model_scratch<span class="ansi-blue-fg">.</span>load_state_dict<span class="ansi-blue-fg">(</span>torch<span class="ansi-blue-fg">.</span>load<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;model_scratch.pt&#39;</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/torch/serialization.py</span> in <span class="ansi-cyan-fg">load</span><span class="ansi-blue-fg">(f, map_location, pickle_module)</span>
-<span class="ansi-green-intense-fg ansi-bold">    299</span>             <span class="ansi-blue-fg">(</span>sys<span class="ansi-blue-fg">.</span>version_info<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span> <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">3</span> <span class="ansi-green-fg">and</span> isinstance<span class="ansi-blue-fg">(</span>f<span class="ansi-blue-fg">,</span> pathlib<span class="ansi-blue-fg">.</span>Path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    300</span>         new_fd <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span>
-<span class="ansi-green-fg">--&gt; 301</span><span class="ansi-red-fg">         </span>f <span class="ansi-blue-fg">=</span> open<span class="ansi-blue-fg">(</span>f<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;rb&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    302</span>     <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">    303</span>         <span class="ansi-green-fg">return</span> _load<span class="ansi-blue-fg">(</span>f<span class="ansi-blue-fg">,</span> map_location<span class="ansi-blue-fg">,</span> pickle_module<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;model_scratch.pt&#39;</pre>
 </div>
 </div>
 
@@ -14067,7 +14012,7 @@ Epoch: 12 	Training Loss: 4.554617 	Validation Loss: 4.492529
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">loaders</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">):</span>
@@ -14117,10 +14062,10 @@ Epoch: 12 	Training Loss: 4.554617 	Validation Loss: 4.492529
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.498001
+<pre>Test Loss: 4.848550
 
 
-Test Accuracy:  5% (45/836)
+Test Accuracy:  2% (18/836)
 </pre>
 </div>
 </div>
@@ -14143,7 +14088,7 @@ Test Accuracy:  5% (45/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Specify data loaders</span>
@@ -14246,7 +14191,7 @@ number test image 836
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torchvision.models</span> <span class="k">as</span> <span class="nn">models</span>
@@ -14376,13 +14321,13 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
 
 <span class="n">criterion_transfer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
-<span class="n">optimizer_transfer</span> <span class="o">=</span>  <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model_transfer</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">optimizer_transfer</span> <span class="o">=</span>  <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model_transfer</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14402,12 +14347,12 @@ model_transfer &lt;bound method Module.cuda of VGG(
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-30-45ef2e55433e&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg">&lt;ipython-input-18-7958905bbd77&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
 <span class="ansi-green-intense-fg ansi-bold">      2</span> 
 <span class="ansi-green-intense-fg ansi-bold">      3</span> criterion_transfer <span class="ansi-blue-fg">=</span> nn<span class="ansi-blue-fg">.</span>CrossEntropyLoss<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>optimizer_transfer <span class="ansi-blue-fg">=</span>  optim<span class="ansi-blue-fg">.</span>SGD<span class="ansi-blue-fg">(</span>model_transfer<span class="ansi-blue-fg">.</span>classifier<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.001</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>optimizer_transfer <span class="ansi-blue-fg">=</span>  optim<span class="ansi-blue-fg">.</span>SGD<span class="ansi-blue-fg">(</span>model_transfer<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.001</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">AttributeError</span>: &#39;function&#39; object has no attribute &#39;classifier&#39;</pre>
+<span class="ansi-red-fg">AttributeError</span>: &#39;function&#39; object has no attribute &#39;parameters&#39;</pre>
 </div>
 </div>
 
@@ -14425,7 +14370,7 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model</span>
@@ -14438,33 +14383,6 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">NameError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-31-e0e8a428033d&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># train the model</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> model_transfer = train(8, loaders_transfer, model_transfer, optimizer_transfer, 
-</span><span class="ansi-green-intense-fg ansi-bold">      3</span>                       criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)
-<span class="ansi-green-intense-fg ansi-bold">      4</span>                 <span class="ansi-red-fg"># =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> 
-
-<span class="ansi-red-fg">NameError</span>: name &#39;optimizer_transfer&#39; is not defined</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -14500,7 +14418,7 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write a function that takes a path to an image as input</span>
@@ -14528,41 +14446,20 @@ model_transfer &lt;bound method Module.cuda of VGG(
 
     <span class="c1"># plot the images in the batch, along with predicted and true labels</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-    <span class="n">number_dogs</span><span class="o">=</span><span class="mi">0</span>
+    
     <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">]],</span> <span class="n">classes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]),</span>
                      <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;green&quot;</span> <span class="k">if</span> <span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">==</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
-        <span class="n">number_dogs</span> <span class="o">=+</span><span class="mi">1</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of dog detected:&#39;</span><span class="p">,</span> <span class="n">number_dogs</span><span class="p">)</span>
+        
+        
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of dog detected:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">class_names</span><span class="p">[</span><span class="n">prediction</span><span class="p">]</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-cyan-fg">  File </span><span class="ansi-green-fg">&#34;&lt;ipython-input-38-c359c4dedbe2&gt;&#34;</span><span class="ansi-cyan-fg">, line </span><span class="ansi-green-fg">32</span>
-<span class="ansi-red-fg">    number_dogs =+1</span>
-              ^
-<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -14587,7 +14484,7 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write your algorithm.</span>
@@ -14598,9 +14495,9 @@ model_transfer &lt;bound method Module.cuda of VGG(
     <span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
     
     <span class="c1">## handle cases for a human face, dog, and neither</span>
-    <span class="n">human_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
+    
     <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">face_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">H</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>      
+        <span class="k">if</span> <span class="n">face_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">H</span><span class="p">]):</span>      
             <span class="n">face_cascade</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CascadeClassifier</span><span class="p">(</span><span class="s1">&#39;haarcascades/haarcascade_frontalface_alt.xml&#39;</span><span class="p">)</span>
 
             <span class="c1"># load color (BGR) image</span>
@@ -14624,10 +14521,11 @@ model_transfer &lt;bound method Module.cuda of VGG(
             <span class="c1"># display the image, along with bounding box</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv_rgb</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>        
-        <span class="k">elif</span>  <span class="n">dog_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">D</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>      
+        <span class="k">elif</span>  <span class="n">dog_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">D</span><span class="p">]):</span>      
             <span class="n">predict_breed_transfer</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+            
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;we haven&#39;t find nither human or dog pictur&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;we haven&#39;t find nither human or dog picture&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14657,19 +14555,22 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>
 <span class="c1">## at least 6 images on your computer.</span>
 <span class="c1">## Feel free to use as many code cells as needed.</span>
-<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;E:\programing\courses\deep_learning\deep-learning-v2-pytorch\project-dog-classification\data</span><span class="se">\t</span><span class="s2">est&quot;</span><span class="p">))</span>
+
 
 <span class="c1">## suggested code, below</span>
 <span class="c1">#for file in np.hstack((human_files[:3], dog_files[:3])):</span>
     <span class="c1">#run_app(file)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">test</span><span class="p">:</span>
-    <span class="n">run_app</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;E:\programing\courses\deep_learning\deep-learning-v2-pytorch\project-dog-classification\data</span><span class="se">\t</span><span class="s2">est&quot;</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">test</span><span class="p">:</span>
+        <span class="n">run_app</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="n">run</span><span class="p">()</span>
 </pre></div>
 
     </div>
