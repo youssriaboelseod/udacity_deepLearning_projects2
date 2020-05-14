@@ -13459,6 +13459,25 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
+100%|██████████| 553433881/553433881 [00:05&lt;00:00, 100573555.32it/s]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -13588,7 +13607,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">human_files_short_numbers</span><span class="o">=</span><span class="mi">0</span>
@@ -13622,9 +13641,9 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
-86
-percentage of the first 100 images in dog_files is 0.86 % have a detected dog face
+<pre>percentage of the first 100 images in human_files is 0.01 % have a detected dog face
+77
+percentage of the first 100 images in dog_files is 0.77 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -13971,9 +13990,9 @@ percentage of the first 100 images in dog_files is 0.86 % have a detected dog fa
     <span class="k">return</span> <span class="n">model</span>
 
 <span class="c1"># train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy</span>
-<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
+<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
                       <span class="n">criterion_scratch</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_scratch.pt&#39;</span><span class="p">)</span>
-
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;model_scratch&quot;</span><span class="p">,</span><span class="n">model_scratch</span><span class="p">)</span>
 <span class="c1"># load the model that got the best validation accuracy</span>
 <span class="n">model_scratch</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model_scratch.pt&#39;</span><span class="p">))</span>
 </pre></div>
@@ -13992,8 +14011,16 @@ percentage of the first 100 images in dog_files is 0.86 % have a detected dog fa
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.877577 	Validation Loss: 4.857086
-Epoch: 2 	Training Loss: 4.852781 	Validation Loss: 4.828055
+<pre>Epoch: 1 	Training Loss: 4.874445 	Validation Loss: 4.850364
+Epoch: 2 	Training Loss: 4.828568 	Validation Loss: 4.800551
+model_scratch Net(
+  (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (conv3): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (fc1): Linear(in_features=50176, out_features=512, bias=True)
+  (fc2): Linear(in_features=512, out_features=133, bias=True)
+  (pool): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+)
 </pre>
 </div>
 </div>
@@ -14062,10 +14089,10 @@ Epoch: 2 	Training Loss: 4.852781 	Validation Loss: 4.828055
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.848550
+<pre>Test Loss: 4.817550
 
 
-Test Accuracy:  2% (18/836)
+Test Accuracy:  2% (23/836)
 </pre>
 </div>
 </div>
@@ -14324,10 +14351,11 @@ model_transfer &lt;bound method Module.cuda of VGG(
 <div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
-
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>     
+    <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">model_transfer</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 <span class="n">criterion_transfer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
-<span class="n">optimizer_transfer</span> <span class="o">=</span>  <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model_transfer</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="c1">#optimizer_transfer =  optim.SGD(model_transfer.parameters(), lr=0.001)</span>
+<span class="n">optimizer_transfer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model_transfer</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14347,12 +14375,14 @@ model_transfer &lt;bound method Module.cuda of VGG(
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-18-7958905bbd77&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> 
+<span class="ansi-green-fg">&lt;ipython-input-18-6a840f7e6707&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">if</span> use_cuda<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     </span>model_transfer <span class="ansi-blue-fg">=</span> model_transfer<span class="ansi-blue-fg">.</span>cuda<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">      3</span> criterion_transfer <span class="ansi-blue-fg">=</span> nn<span class="ansi-blue-fg">.</span>CrossEntropyLoss<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg"> </span>optimizer_transfer <span class="ansi-blue-fg">=</span>  optim<span class="ansi-blue-fg">.</span>SGD<span class="ansi-blue-fg">(</span>model_transfer<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span> lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.001</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg">#optimizer_transfer =  optim.SGD(model_transfer.parameters(), lr=0.001)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span> optimizer_transfer <span class="ansi-blue-fg">=</span> optim<span class="ansi-blue-fg">.</span>SGD<span class="ansi-blue-fg">(</span>model_transfer<span class="ansi-blue-fg">.</span>classifier<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.001</span><span class="ansi-blue-fg">,</span>momentum<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.9</span><span class="ansi-blue-fg">)</span>
 
-<span class="ansi-red-fg">AttributeError</span>: &#39;function&#39; object has no attribute &#39;parameters&#39;</pre>
+<span class="ansi-red-fg">AttributeError</span>: &#39;function&#39; object has no attribute &#39;cuda&#39;</pre>
 </div>
 </div>
 
@@ -14430,29 +14460,27 @@ model_transfer &lt;bound method Module.cuda of VGG(
 <span class="k">def</span> <span class="nf">predict_breed_transfer</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load the image and return the predicted breed</span>
     <span class="c1"># obtain one batch of test images</span>
+  
+    
     <span class="n">dataiter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">loaders_transfer</span><span class="p">,</span><span class="n">class_names</span><span class="p">)</span>
     <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">dataiter</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
     <span class="n">images</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
 
-    <span class="c1"># move model inputs to cuda, if GPU available</span>
-    <span class="k">if</span> <span class="n">train_on_gpu</span><span class="p">:</span>
-        <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-
+    <span class="c1">#img_tensor = train_transforms(img_path)[:3,:,:].unsqueeze(0)</span>
+    <span class="c1">#img_tensor = img_tensor.reshape(3,224,224)</span>
+    <span class="c1"># 2: Output of step 1 is a vector which is taken as an input for fully connected layer.</span>
+    
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="n">img_tensor</span> <span class="o">=</span> <span class="n">img_tensor</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+                <span class="n">model_transfer</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
     <span class="c1"># get sample outputs</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="n">vgg16</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">model_transfer</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
     <span class="c1"># convert output probabilities to predicted class</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">preds_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">prediction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">preds_tensor</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">train_on_gpu</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">preds_tensor</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
 
-    <span class="c1"># plot the images in the batch, along with predicted and true labels</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-    
-    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">):</span>
-        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">xticks</span><span class="o">=</span><span class="p">[],</span> <span class="n">yticks</span><span class="o">=</span><span class="p">[])</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">]],</span> <span class="n">classes</span><span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]]),</span>
-                     <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;green&quot;</span> <span class="k">if</span> <span class="n">preds</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">==</span><span class="n">labels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
-        
+  
         
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of dog detected:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
 
@@ -14561,16 +14589,15 @@ model_transfer &lt;bound method Module.cuda of VGG(
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>
 <span class="c1">## at least 6 images on your computer.</span>
 <span class="c1">## Feel free to use as many code cells as needed.</span>
-
+<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;E:\programing\courses\deep_learning\deep-learning-v2-pytorch\project-dog-classification\data</span><span class="se">\t</span><span class="s2">est&quot;</span><span class="p">))</span>
 
 <span class="c1">## suggested code, below</span>
 <span class="c1">#for file in np.hstack((human_files[:3], dog_files[:3])):</span>
     <span class="c1">#run_app(file)</span>
-<span class="k">def</span> <span class="nf">run</span><span class="p">():</span>
-    <span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;E:\programing\courses\deep_learning\deep-learning-v2-pytorch\project-dog-classification\data</span><span class="se">\t</span><span class="s2">est&quot;</span><span class="p">))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">test</span><span class="p">:</span>
-        <span class="n">run_app</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-<span class="n">run</span><span class="p">()</span>
+
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">test</span><span class="p">:</span>
+    <span class="n">run_app</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
 </pre></div>
 
     </div>

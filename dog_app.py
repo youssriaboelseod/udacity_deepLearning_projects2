@@ -215,7 +215,7 @@ if use_cuda:
 # 
 # Before writing the function, make sure that you take the time to learn  how to appropriately pre-process tensors for pre-trained models in the [PyTorch documentation](http://pytorch.org/docs/stable/torchvision/models.html).
 
-# In[ ]:
+# In[7]:
 
 
 from PIL import Image
@@ -276,7 +276,7 @@ def VGG16_predict(img_path):
 # 
 # Use these ideas to complete the `dog_detector` function below, which returns `True` if a dog is detected in an image (and `False` if not).
 
-# In[ ]:
+# In[8]:
 
 
 ### returns "True" if a dog is detected in the image stored at img_path
@@ -296,22 +296,23 @@ def dog_detector(img_path):
 # __Answer:__ 
 # 
 
-# In[ ]:
+# In[9]:
 
 
-### TODO: Test the performance of the dog_detector function
-### on the images in human_files_short and dog_files_short.
 human_files_short_numbers=0
 for H in range(len(human_files_short)):
-    human_files_short_numbers+=1
+    if dog_detector(human_files_short[H]):      
+        human_files_short_numbers+=1
 percentage_human_files_short=human_files_short_numbers/len(human_files_short)
-print(human_files_short_numbers)
 
 print("percentage of the first 100 images in human_files is",percentage_human_files_short,"% have a detected dog face")
 dog_files_short_numbers=0
 for D in range(len(dog_files_short)):
-    dog_files_short_numbers+=1
+    if dog_detector(dog_files_short[D]):      
+        dog_files_short_numbers+=1
 percentage_dog_files_short=dog_files_short_numbers/len(dog_files_short)
+print(dog_files_short_numbers)
+
 print("percentage of the first 100 images in dog_files is",percentage_dog_files_short,"% have a detected dog face")
 
 
@@ -486,7 +487,7 @@ optimizer_scratch = torch.optim.SGD(model_scratch.parameters(), lr = 0.01)
 # 
 # Train and validate your model in the code cell below.  [Save the final model parameters](http://pytorch.org/docs/master/notes/serialization.html) at filepath `'model_scratch.pt'`.
 
-# In[ ]:
+# In[14]:
 
 
 def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
@@ -548,16 +549,17 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
             ))
 
         ## TODO: save the model if validation loss has decreased
-        if valid_loss > train_loss:
+        if valid_loss < train_loss:
             torch.save(model.state_dict(), save_path)
+            valid_loss_min = valid_loss
 
     # return trained model
     return model
 
-# train the model
-model_scratch = train(12, loaders_scratch, model_scratch, optimizer_scratch, 
+# train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy
+model_scratch = train(1, loaders_scratch, model_scratch, optimizer_scratch, 
                       criterion_scratch, use_cuda, 'model_scratch.pt')
-
+print ("model_scratch",model_scratch)
 # load the model that got the best validation accuracy
 model_scratch.load_state_dict(torch.load('model_scratch.pt'))
 
@@ -566,7 +568,7 @@ model_scratch.load_state_dict(torch.load('model_scratch.pt'))
 # 
 # Try out your model on the test dataset of dog images.  Use the code cell below to calculate and print the test loss and accuracy.  Ensure that your test accuracy is greater than 10%.
 
-# In[ ]:
+# In[15]:
 
 
 def test(loaders, model, criterion, use_cuda):
@@ -614,7 +616,7 @@ test(loaders_scratch, model_scratch, criterion_scratch, use_cuda)
 # 
 # If you like, **you are welcome to use the same data loaders from the previous step**, when you created a CNN from scratch.
 
-# In[ ]:
+# In[16]:
 
 
 ## TODO: Specify data loaders
@@ -686,7 +688,7 @@ print ("number test image" , len(test_data))
 # 
 # Use transfer learning to create a CNN to classify dog breed.  Use the code cell below, and save your initialized model as the variable `model_transfer`.
 
-# In[ ]:
+# In[17]:
 
 
 import torchvision.models as models
@@ -729,11 +731,14 @@ print("model_transfer",model_transfer)
 # 
 # Use the next code cell to specify a [loss function](http://pytorch.org/docs/master/nn.html#loss-functions) and [optimizer](http://pytorch.org/docs/master/optim.html).  Save the chosen loss function as `criterion_transfer`, and the optimizer as `optimizer_transfer` below.
 
-# In[ ]:
+# In[18]:
 
 
+if use_cuda:     
+    model_transfer = model_transfer.cuda()
 criterion_transfer = nn.CrossEntropyLoss()
-optimizer_transfer =  optim.SGD(model_transfer.classifier.parameters(), lr=0.001)
+#optimizer_transfer =  optim.SGD(model_transfer.parameters(), lr=0.001)
+optimizer_transfer = optim.SGD(model_transfer.classifier.parameters(),lr=0.001,momentum=0.9)
 
 
 # ### (IMPLEMENTATION) Train and Validate the Model
@@ -778,28 +783,30 @@ class_names = [item[4:].replace("_", " ") for item in data_transfer['train'].cla
 def predict_breed_transfer(img_path):
     # load the image and return the predicted breed
     # obtain one batch of test images
+  
+    
     dataiter = iter(loaders_transfer,class_names)
     images, labels = dataiter.next()
     images.numpy()
 
-    # move model inputs to cuda, if GPU available
-    if train_on_gpu:
-        images = images.cuda()
-
+    #img_tensor = train_transforms(img_path)[:3,:,:].unsqueeze(0)
+    #img_tensor = img_tensor.reshape(3,224,224)
+    # 2: Output of step 1 is a vector which is taken as an input for fully connected layer.
+    
+    if torch.cuda.is_available():
+        img_tensor = img_tensor.cuda()
+        with torch.no_grad():
+                model_transfer.eval()
     # get sample outputs
-    output = vgg16(images)
+    output = model_transfer(images)
     # convert output probabilities to predicted class
     _, preds_tensor = torch.max(output, 1)
     prediction = np.squeeze(preds_tensor.numpy()) if not train_on_gpu else np.squeeze(preds_tensor.cpu().numpy())
 
-    # plot the images in the batch, along with predicted and true labels
-    fig = plt.figure(figsize=(25, 4))
-    for idx in np.arange(20):
-        ax = fig.add_subplot(2, 20/2, idx+1, xticks=[], yticks=[])
-        plt.imshow(np.transpose(images[idx], (1, 2, 0)))
-        ax.set_title("{} ({})".format(classes[preds[idx]], classes[labels[idx]]),
-                     color=("green" if preds[idx]==labels[idx].item() else "red")
-    
+  
+        
+    print('Number of dog detected:', len(output))
+
     return class_names[prediction]
 
 
@@ -828,8 +835,41 @@ def predict_breed_transfer(img_path):
 ### Feel free to use as many code cells as needed.
 
 def run_app(img_path):
+    # load filenames for human and dog images
+    images = np.array(glob(img_path))
+    
     ## handle cases for a human face, dog, and neither
     
+    for H in range(len(images)):
+        if face_detector(images[H]):      
+            face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
+
+            # load color (BGR) image
+            img = cv2.imread(img_path[0])
+            # convert BGR image to grayscale
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            # find faces in image
+            faces = face_cascade.detectMultiScale(gray)
+
+            # print number of faces detected in the image
+            print('Number of faces detected:', len(faces))
+
+            # get bounding box for each detected face
+            for (x,y,w,h) in faces:
+                # add bounding box to color image
+                cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+
+            # convert BGR image to RGB for plotting
+            cv_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+            # display the image, along with bounding box
+            plt.imshow(cv_rgb)
+            plt.show()        
+        elif  dog_detector(images[D]):      
+            predict_breed_transfer(images)
+            
+        else:
+            print("we haven't find nither human or dog picture")
 
 
 # ---
@@ -852,8 +892,31 @@ def run_app(img_path):
 ## TODO: Execute your algorithm from Step 6 on
 ## at least 6 images on your computer.
 ## Feel free to use as many code cells as needed.
+test = np.array(glob("E:\programing\courses\deep_learning\deep-learning-v2-pytorch\project-dog-classification\data\test"))
 
 ## suggested code, below
-for file in np.hstack((human_files[:3], dog_files[:3])):
-    run_app(file)
+#for file in np.hstack((human_files[:3], dog_files[:3])):
+    #run_app(file)
+
+
+for i in test:
+    run_app(i)
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
