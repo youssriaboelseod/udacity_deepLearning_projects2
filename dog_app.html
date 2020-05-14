@@ -13470,7 +13470,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:05&lt;00:00, 99936895.14it/s] 
+100%|██████████| 553433881/553433881 [00:05&lt;00:00, 100116832.84it/s]
 </pre>
 </div>
 </div>
@@ -13641,9 +13641,9 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>percentage of the first 100 images in human_files is 0.01 % have a detected dog face
-75
-percentage of the first 100 images in dog_files is 0.75 % have a detected dog face
+<pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
+79
+percentage of the first 100 images in dog_files is 0.79 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -14011,7 +14011,7 @@ percentage of the first 100 images in dog_files is 0.75 % have a detected dog fa
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.881834 	Validation Loss: 4.864819
+<pre>Epoch: 1 	Training Loss: 4.882251 	Validation Loss: 4.866453
 model_scratch Net(
   (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -14088,10 +14088,10 @@ model_scratch Net(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.883465
+<pre>Test Loss: 4.870573
 
 
-Test Accuracy:  1% ( 9/836)
+Test Accuracy:  1% (10/836)
 </pre>
 </div>
 </div>
@@ -14114,7 +14114,7 @@ Test Accuracy:  1% ( 9/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Specify data loaders</span>
@@ -14166,7 +14166,7 @@ Test Accuracy:  1% ( 9/836)
 
 <span class="n">test_data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">ImageFolder</span><span class="p">(</span><span class="s1">&#39;/data/dog_images&#39;</span> <span class="o">+</span> <span class="s1">&#39;/test&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">test_transforms</span><span class="p">)</span>
 
-<span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batchSize</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">data_transfer</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batchSize</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">validloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">valid_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batchSize</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">testloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batchSize</span><span class="p">)</span>
@@ -14373,7 +14373,8 @@ model_transfer VGG(
 <div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model #bre adjust epoch to be 8</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model </span>
+<span class="c1">#ebouch 1 get 58% accuracy must to be 2 ebochs at list</span>
 <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
                       <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">)</span>
                 <span class="c1"># =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)</span>
@@ -14396,7 +14397,7 @@ model_transfer VGG(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.186303 	Validation Loss: 1.783576
+<pre>Epoch: 1 	Training Loss: 4.192692 	Validation Loss: 1.797461
 </pre>
 </div>
 </div>
@@ -14435,10 +14436,10 @@ model_transfer VGG(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 1.783112
+<pre>Test Loss: 1.857059
 
 
-Test Accuracy: 59% (496/836)
+Test Accuracy: 58% (489/836)
 </pre>
 </div>
 </div>
@@ -14457,14 +14458,14 @@ Test Accuracy: 59% (496/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write a function that takes a path to an image as input</span>
 <span class="c1">### and returns the dog breed that is predicted by the model.</span>
 
 <span class="c1"># list of class names by index, i.e. a name can be accessed like class_names[0]</span>
-<span class="n">class_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_transfer</span><span class="p">[</span><span class="s1">&#39;train&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">classes</span><span class="p">]</span>
+<span class="n">class_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_transfer</span><span class="o">.</span><span class="n">classes</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">predict_breed_transfer</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load the image and return the predicted breed</span>
@@ -14500,40 +14501,6 @@ Test Accuracy: 59% (496/836)
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-25-869fa8a48d30&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> 
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># list of class names by index, i.e. a name can be accessed like class_names[0]</span>
-<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>class_names <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>item<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">4</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>replace<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;_&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34; &#34;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> item <span class="ansi-green-fg">in</span> data_transfer<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;train&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>classes<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span> 
-<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">def</span> predict_breed_transfer<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/torchvision-0.2.1-py3.6.egg/torchvision/datasets/folder.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, index)</span>
-<span class="ansi-green-intense-fg ansi-bold">     98</span>             tuple<span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">(</span>sample<span class="ansi-blue-fg">,</span> target<span class="ansi-blue-fg">)</span> where target <span class="ansi-green-fg">is</span> class_index of the target <span class="ansi-green-fg">class</span><span class="ansi-blue-fg">.</span>
-<span class="ansi-green-intense-fg ansi-bold">     99</span>         &#34;&#34;&#34;
-<span class="ansi-green-fg">--&gt; 100</span><span class="ansi-red-fg">         </span>path<span class="ansi-blue-fg">,</span> target <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>samples<span class="ansi-blue-fg">[</span>index<span class="ansi-blue-fg">]</span>
-<span class="ansi-green-intense-fg ansi-bold">    101</span>         sample <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>loader<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">    102</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>transform <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
-
-<span class="ansi-red-fg">TypeError</span>: list indices must be integers or slices, not str</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -14555,7 +14522,7 @@ Test Accuracy: 59% (496/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write your algorithm.</span>
@@ -14626,7 +14593,7 @@ Test Accuracy: 59% (496/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>

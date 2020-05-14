@@ -662,13 +662,13 @@ test_transforms = transforms.Compose([transforms.Resize(224),
                                                             [0.229, 0.224, 0.225])])
 
 # Pass transforms in here, then run the next cell to see how the transforms look
-train_data = datasets.ImageFolder('/data/dog_images' + '/train', transform=train_transforms)
+data_transfer = datasets.ImageFolder('/data/dog_images' + '/train', transform=train_transforms)
 
 valid_data = datasets.ImageFolder('/data/dog_images' + '/valid', transform=test_transforms)
 
 test_data = datasets.ImageFolder('/data/dog_images' + '/test', transform=test_transforms)
 
-trainloader = torch.utils.data.DataLoader(train_data, batch_size=batchSize, shuffle=True)
+trainloader = torch.utils.data.DataLoader(data_transfer, batch_size=batchSize, shuffle=True)
 validloader = torch.utils.data.DataLoader(valid_data, batch_size=batchSize, shuffle=True)
 
 testloader = torch.utils.data.DataLoader(test_data, batch_size=batchSize)
@@ -716,8 +716,8 @@ last_layer = nn.Linear(n_inputs, 133)
 
 model_transfer.classifier[6] = last_layer
 
-if use_cuda:
-    model_transfer = model_transfer.cuda
+if use_cuda:     
+    model_transfer = model_transfer.cuda()
 
 print("model_transfer",model_transfer)
 
@@ -734,8 +734,7 @@ print("model_transfer",model_transfer)
 # In[18]:
 
 
-if use_cuda:     
-    model_transfer = model_transfer.cuda()
+
 criterion_transfer = nn.CrossEntropyLoss()
 #optimizer_transfer =  optim.SGD(model_transfer.parameters(), lr=0.001)
 optimizer_transfer = optim.SGD(model_transfer.classifier.parameters(),lr=0.001,momentum=0.9)
@@ -745,11 +744,12 @@ optimizer_transfer = optim.SGD(model_transfer.classifier.parameters(),lr=0.001,m
 # 
 # Train and validate your model in the code cell below.  [Save the final model parameters](http://pytorch.org/docs/master/notes/serialization.html) at filepath `'model_transfer.pt'`.
 
-# In[ ]:
+# In[19]:
 
 
-# train the model
-model_transfer = train(8, loaders_transfer, model_transfer, optimizer_transfer, 
+# train the model 
+#ebouch 1 get 58% accuracy must to be 2 ebochs at list
+model_transfer = train(1, loaders_transfer, model_transfer, optimizer_transfer, 
                       criterion_transfer, use_cuda, 'model_transfer.pt')
                 # =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, 'model_transfer.pt')
 
@@ -761,7 +761,7 @@ model_transfer.load_state_dict(torch.load('model_transfer.pt'))
 # 
 # Try out your model on the test dataset of dog images. Use the code cell below to calculate and print the test loss and accuracy.  Ensure that your test accuracy is greater than 60%.
 
-# In[ ]:
+# In[20]:
 
 
 test(loaders_transfer, model_transfer, criterion_transfer, use_cuda)
@@ -771,14 +771,14 @@ test(loaders_transfer, model_transfer, criterion_transfer, use_cuda)
 # 
 # Write a function that takes an image path as input and returns the dog breed (`Affenpinscher`, `Afghan hound`, etc) that is predicted by your model.  
 
-# In[ ]:
+# In[21]:
 
 
 ### TODO: Write a function that takes a path to an image as input
 ### and returns the dog breed that is predicted by the model.
 
 # list of class names by index, i.e. a name can be accessed like class_names[0]
-class_names = [item[4:].replace("_", " ") for item in data_transfer['train'].classes]
+class_names = [item[4:].replace("_", " ") for item in data_transfer.classes]
 
 def predict_breed_transfer(img_path):
     # load the image and return the predicted breed
@@ -828,7 +828,7 @@ def predict_breed_transfer(img_path):
 # 
 # ### (IMPLEMENTATION) Write your Algorithm
 
-# In[ ]:
+# In[22]:
 
 
 ### TODO: Write your algorithm.
@@ -886,7 +886,7 @@ def run_app(img_path):
 
 # __Answer:__ (Three possible points for improvement)
 
-# In[ ]:
+# In[23]:
 
 
 ## TODO: Execute your algorithm from Step 6 on
