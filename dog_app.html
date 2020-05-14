@@ -13470,7 +13470,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:05&lt;00:00, 100573555.32it/s]
+100%|██████████| 553433881/553433881 [00:05&lt;00:00, 99936895.14it/s] 
 </pre>
 </div>
 </div>
@@ -13642,8 +13642,8 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>percentage of the first 100 images in human_files is 0.01 % have a detected dog face
-77
-percentage of the first 100 images in dog_files is 0.77 % have a detected dog face
+75
+percentage of the first 100 images in dog_files is 0.75 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -14011,8 +14011,7 @@ percentage of the first 100 images in dog_files is 0.77 % have a detected dog fa
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.874445 	Validation Loss: 4.850364
-Epoch: 2 	Training Loss: 4.828568 	Validation Loss: 4.800551
+<pre>Epoch: 1 	Training Loss: 4.881834 	Validation Loss: 4.864819
 model_scratch Net(
   (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -14089,10 +14088,10 @@ model_scratch Net(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.817550
+<pre>Test Loss: 4.883465
 
 
-Test Accuracy:  2% (23/836)
+Test Accuracy:  1% ( 9/836)
 </pre>
 </div>
 </div>
@@ -14115,7 +14114,7 @@ Test Accuracy:  2% (23/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Specify data loaders</span>
@@ -14161,7 +14160,7 @@ Test Accuracy:  2% (23/836)
                                                             <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])])</span>
 
 <span class="c1"># Pass transforms in here, then run the next cell to see how the transforms look</span>
-<span class="n">train_data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">ImageFolder</span><span class="p">(</span><span class="s1">&#39;/data/dog_images&#39;</span> <span class="o">+</span> <span class="s1">&#39;/train&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">train_transforms</span><span class="p">)</span>
+<span class="n">data_transfer</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">ImageFolder</span><span class="p">(</span><span class="s1">&#39;/data/dog_images&#39;</span> <span class="o">+</span> <span class="s1">&#39;/train&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">train_transforms</span><span class="p">)</span>
 
 <span class="n">valid_data</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">ImageFolder</span><span class="p">(</span><span class="s1">&#39;/data/dog_images&#39;</span> <span class="o">+</span> <span class="s1">&#39;/valid&#39;</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">test_transforms</span><span class="p">)</span>
 
@@ -14246,8 +14245,8 @@ number test image 836
 
 <span class="n">model_transfer</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">last_layer</span>
 
-<span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>
-    <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">model_transfer</span><span class="o">.</span><span class="n">cuda</span>
+<span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>     
+    <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">model_transfer</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;model_transfer&quot;</span><span class="p">,</span><span class="n">model_transfer</span><span class="p">)</span>
 </pre></div>
@@ -14270,7 +14269,7 @@ number test image 836
 1000
 in_features 4096
 out_features 1000
-model_transfer &lt;bound method Module.cuda of VGG(
+model_transfer VGG(
   (features): Sequential(
     (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
     (1): ReLU(inplace)
@@ -14313,7 +14312,7 @@ model_transfer &lt;bound method Module.cuda of VGG(
     (5): Dropout(p=0.5)
     (6): Linear(in_features=4096, out_features=133, bias=True)
   )
-)&gt;
+)
 </pre>
 </div>
 </div>
@@ -14351,11 +14350,36 @@ model_transfer &lt;bound method Module.cuda of VGG(
 <div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>     
-    <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">model_transfer</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
-<span class="n">criterion_transfer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">criterion_transfer</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
 <span class="c1">#optimizer_transfer =  optim.SGD(model_transfer.parameters(), lr=0.001)</span>
 <span class="n">optimizer_transfer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">model_transfer</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span><span class="n">momentum</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="(IMPLEMENTATION)-Train-and-Validate-the-Model">(IMPLEMENTATION) Train and Validate the Model<a class="anchor-link" href="#(IMPLEMENTATION)-Train-and-Validate-the-Model">&#182;</a></h3><p>Train and validate your model in the code cell below.  <a href="http://pytorch.org/docs/master/notes/serialization.html">Save the final model parameters</a> at filepath <code>'model_transfer.pt'</code>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model #bre adjust epoch to be 8</span>
+<span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
+                      <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">)</span>
+                <span class="c1"># =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)</span>
+
+<span class="c1"># load the model that got the best validation accuracy (uncomment the line below)</span>
+<span class="n">model_transfer</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -14371,48 +14395,12 @@ model_transfer &lt;bound method Module.cuda of VGG(
     <div class="prompt"></div>
 
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">AttributeError</span>                            Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-18-6a840f7e6707&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">if</span> use_cuda<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     </span>model_transfer <span class="ansi-blue-fg">=</span> model_transfer<span class="ansi-blue-fg">.</span>cuda<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span> criterion_transfer <span class="ansi-blue-fg">=</span> nn<span class="ansi-blue-fg">.</span>CrossEntropyLoss<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg">#optimizer_transfer =  optim.SGD(model_transfer.parameters(), lr=0.001)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span> optimizer_transfer <span class="ansi-blue-fg">=</span> optim<span class="ansi-blue-fg">.</span>SGD<span class="ansi-blue-fg">(</span>model_transfer<span class="ansi-blue-fg">.</span>classifier<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">,</span>lr<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.001</span><span class="ansi-blue-fg">,</span>momentum<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">0.9</span><span class="ansi-blue-fg">)</span>
-
-<span class="ansi-red-fg">AttributeError</span>: &#39;function&#39; object has no attribute &#39;cuda&#39;</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Epoch: 1 	Training Loss: 4.186303 	Validation Loss: 1.783576
+</pre>
 </div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="(IMPLEMENTATION)-Train-and-Validate-the-Model">(IMPLEMENTATION) Train and Validate the Model<a class="anchor-link" href="#(IMPLEMENTATION)-Train-and-Validate-the-Model">&#182;</a></h3><p>Train and validate your model in the code cell below.  <a href="http://pytorch.org/docs/master/notes/serialization.html">Save the final model parameters</a> at filepath <code>'model_transfer.pt'</code>.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model</span>
-<span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
-                      <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">)</span>
-                <span class="c1"># =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)</span>
-
-<span class="c1"># load the model that got the best validation accuracy (uncomment the line below)</span>
-<span class="n">model_transfer</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">))</span>
-</pre></div>
-
-    </div>
 </div>
 </div>
 
@@ -14427,13 +14415,34 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span><span class="p">(</span><span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Test Loss: 1.783112
+
+
+Test Accuracy: 59% (496/836)
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -14448,7 +14457,7 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write a function that takes a path to an image as input</span>
@@ -14488,6 +14497,40 @@ model_transfer &lt;bound method Module.cuda of VGG(
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-25-869fa8a48d30&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> 
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-red-fg"># list of class names by index, i.e. a name can be accessed like class_names[0]</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>class_names <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">[</span>item<span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">4</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>replace<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;_&#34;</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34; &#34;</span><span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">for</span> item <span class="ansi-green-fg">in</span> data_transfer<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">&#39;train&#39;</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>classes<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> 
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">def</span> predict_breed_transfer<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/torchvision-0.2.1-py3.6.egg/torchvision/datasets/folder.py</span> in <span class="ansi-cyan-fg">__getitem__</span><span class="ansi-blue-fg">(self, index)</span>
+<span class="ansi-green-intense-fg ansi-bold">     98</span>             tuple<span class="ansi-blue-fg">:</span> <span class="ansi-blue-fg">(</span>sample<span class="ansi-blue-fg">,</span> target<span class="ansi-blue-fg">)</span> where target <span class="ansi-green-fg">is</span> class_index of the target <span class="ansi-green-fg">class</span><span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">     99</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 100</span><span class="ansi-red-fg">         </span>path<span class="ansi-blue-fg">,</span> target <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>samples<span class="ansi-blue-fg">[</span>index<span class="ansi-blue-fg">]</span>
+<span class="ansi-green-intense-fg ansi-bold">    101</span>         sample <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>loader<span class="ansi-blue-fg">(</span>path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    102</span>         <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>transform <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">TypeError</span>: list indices must be integers or slices, not str</pre>
+</div>
+</div>
+
 </div>
 </div>
 
