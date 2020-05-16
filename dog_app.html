@@ -13474,7 +13474,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:05&lt;00:00, 96657494.54it/s] 
+100%|██████████| 553433881/553433881 [00:13&lt;00:00, 40105255.00it/s] 
 </pre>
 </div>
 </div>
@@ -13651,9 +13651,9 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>percentage of the first 100 images in human_files is 0.01 % have a detected dog face
-78
-percentage of the first 100 images in dog_files is 0.78 % have a detected dog face
+<pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
+80
+percentage of the first 100 images in dog_files is 0.8 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -14008,8 +14008,8 @@ percentage of the first 100 images in dog_files is 0.78 % have a detected dog fa
     <span class="c1"># return trained model</span>
     <span class="k">return</span> <span class="n">model</span>
 
-<span class="c1"># train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy</span>
-<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
+<span class="c1"># train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy the epoch shold be 30 epoch</span>
+<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
                       <span class="n">criterion_scratch</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_scratch.pt&#39;</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;model_scratch&quot;</span><span class="p">,</span><span class="n">model_scratch</span><span class="p">)</span>
 <span class="c1"># load the model that got the best validation accuracy</span>
@@ -14030,7 +14030,7 @@ percentage of the first 100 images in dog_files is 0.78 % have a detected dog fa
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.875914 	Validation Loss: 4.854785
+<pre>Epoch: 1 	Training Loss: 4.877770 	Validation Loss: 4.857650
 model_scratch Net(
   (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -14107,10 +14107,10 @@ model_scratch Net(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.880398
+<pre>Test Loss: 4.877267
 
 
-Test Accuracy:  1% (16/836)
+Test Accuracy:  1% (10/836)
 </pre>
 </div>
 </div>
@@ -14404,7 +14404,8 @@ To avoid overfitting on the small data set, the weights of the original network 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model </span>
-<span class="c1">#ebouch 1 get 58% accuracy for epoch train 1  must to be 8 ebochs at list for 12 ebochs in train</span>
+<span class="c1">#ebouch 1 get 58%(train epoch=1) accuracy for epoch train 1  , epoch 2 get 75% accuracey for train epoch=2</span>
+
 <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
                       <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">)</span>
                 <span class="c1"># =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)</span>
@@ -14427,8 +14428,8 @@ To avoid overfitting on the small data set, the weights of the original network 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.186012 	Validation Loss: 1.848820
-Epoch: 2 	Training Loss: 2.606261 	Validation Loss: 0.852860
+<pre>Epoch: 1 	Training Loss: 4.229452 	Validation Loss: 1.860316
+Epoch: 2 	Training Loss: 2.662923 	Validation Loss: 0.817756
 </pre>
 </div>
 </div>
@@ -14467,10 +14468,10 @@ Epoch: 2 	Training Loss: 2.606261 	Validation Loss: 0.852860
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 0.921422
+<pre>Test Loss: 0.825005
 
 
-Test Accuracy: 75% (631/836)
+Test Accuracy: 75% (634/836)
 </pre>
 </div>
 </div>
@@ -14553,7 +14554,7 @@ Test Accuracy: 75% (631/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write your algorithm.</span>
@@ -14561,41 +14562,25 @@ Test Accuracy: 75% (631/836)
 
 <span class="k">def</span> <span class="nf">run_app</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load filenames for human and dog images</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
-    
+    <span class="c1">#images = np.array(glob(img_path))</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
     <span class="c1">## handle cases for a human face, dog, and neither</span>
     
-    <span class="k">for</span> <span class="n">H</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">images</span><span class="p">)):</span>
-        <span class="k">if</span> <span class="n">face_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">H</span><span class="p">]):</span>      
-            <span class="n">face_cascade</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CascadeClassifier</span><span class="p">(</span><span class="s1">&#39;haarcascades/haarcascade_frontalface_alt.xml&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">face_detector</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>      
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hi human you are like &quot;</span><span class="p">,</span><span class="n">predict_breed_transfer</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
+        <span class="c1"># display the image, along with bounding box</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>        
+    <span class="k">elif</span>  <span class="n">dog_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">D</span><span class="p">]):</span>      
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;hi Dog you are like &quot;</span><span class="p">,</span><span class="n">predict_breed_transfer</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
+        <span class="c1"># display the image, along with bounding box</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>        
 
-            <span class="c1"># load color (BGR) image</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">img_path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-            <span class="c1"># convert BGR image to grayscale</span>
-            <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
-            <span class="c1"># find faces in image</span>
-            <span class="n">faces</span> <span class="o">=</span> <span class="n">face_cascade</span><span class="o">.</span><span class="n">detectMultiScale</span><span class="p">(</span><span class="n">gray</span><span class="p">)</span>
-
-            <span class="c1"># print number of faces detected in the image</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of human faces detected:&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">))</span>
-
-            <span class="c1"># get bounding box for each detected face</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">h</span><span class="p">)</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
-                <span class="c1"># add bounding box to color image</span>
-                <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">img</span><span class="p">,(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">),(</span><span class="n">x</span><span class="o">+</span><span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="o">+</span><span class="n">h</span><span class="p">),(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span>
-
-            <span class="c1"># convert BGR image to RGB for plotting</span>
-            <span class="n">cv_rgb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
-
-            <span class="c1"># display the image, along with bounding box</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">cv_rgb</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>        
-        <span class="k">elif</span>  <span class="n">dog_detector</span><span class="p">(</span><span class="n">images</span><span class="p">[</span><span class="n">D</span><span class="p">]):</span>      
-            <span class="n">predict_breed_transfer</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
-            <span class="n">display_image</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="n">predicted_breed</span><span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;we haven&#39;t find nither human or dog picture&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;we haven&#39;t find nither human or dog picture&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  
 </pre></div>
 
     </div>
@@ -14618,14 +14603,17 @@ Test Accuracy: 75% (631/836)
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong> (Three possible points for improvement)</p>
+<p><strong>Answer:</strong> (Three possible points for improvement)
+i havn't the same numbers of images &gt;&gt; so i must re fix the test of the direcoryt</p>
+<p>the train of network is low accuracy in step3 &gt;&gt; so i should raise number of epochs</p>
+<p>the details in images is not enopth &gt;&gt; so i should add new convolutional layer and more depth  and more pooling layer</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>
@@ -14671,28 +14659,27 @@ Test Accuracy: 75% (631/836)
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">error</span>                                     Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-34-4c513a558e37&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-red-fg">IsADirectoryError</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-29-4c513a558e37&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
 <span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> test<span class="ansi-blue-fg">:</span>
 <span class="ansi-green-intense-fg ansi-bold">     13</span> 
 <span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">     </span>run_app<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">&lt;ipython-input-25-f3ca08334a58&gt;</span> in <span class="ansi-cyan-fg">run_app</span><span class="ansi-blue-fg">(img_path)</span>
+<span class="ansi-green-fg">&lt;ipython-input-24-82c6c6ca18d1&gt;</span> in <span class="ansi-cyan-fg">run_app</span><span class="ansi-blue-fg">(img_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     <span class="ansi-red-fg"># load filenames for human and dog images</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span>     <span class="ansi-red-fg">#images = np.array(glob(img_path))</span>
+<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">     </span>images <span class="ansi-blue-fg">=</span> Image<span class="ansi-blue-fg">.</span>open<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      8</span>     <span class="ansi-red-fg">## handle cases for a human face, dog, and neither</span>
 <span class="ansi-green-intense-fg ansi-bold">      9</span> 
-<span class="ansi-green-intense-fg ansi-bold">     10</span>     <span class="ansi-green-fg">for</span> H <span class="ansi-green-fg">in</span> range<span class="ansi-blue-fg">(</span>len<span class="ansi-blue-fg">(</span>images<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">if</span> face_detector<span class="ansi-blue-fg">(</span>images<span class="ansi-blue-fg">[</span>H<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span>             face_cascade <span class="ansi-blue-fg">=</span> cv2<span class="ansi-blue-fg">.</span>CascadeClassifier<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;haarcascades/haarcascade_frontalface_alt.xml&#39;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span> 
 
-<span class="ansi-green-fg">&lt;ipython-input-3-9d98894748d5&gt;</span> in <span class="ansi-cyan-fg">face_detector</span><span class="ansi-blue-fg">(img_path)</span>
-<span class="ansi-green-intense-fg ansi-bold">      2</span> <span class="ansi-green-fg">def</span> face_detector<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>     img <span class="ansi-blue-fg">=</span> cv2<span class="ansi-blue-fg">.</span>imread<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">----&gt; 4</span><span class="ansi-red-fg">     </span>gray <span class="ansi-blue-fg">=</span> cv2<span class="ansi-blue-fg">.</span>cvtColor<span class="ansi-blue-fg">(</span>img<span class="ansi-blue-fg">,</span> cv2<span class="ansi-blue-fg">.</span>COLOR_BGR2GRAY<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     faces <span class="ansi-blue-fg">=</span> face_cascade<span class="ansi-blue-fg">.</span>detectMultiScale<span class="ansi-blue-fg">(</span>gray<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span>     <span class="ansi-green-fg">return</span> len<span class="ansi-blue-fg">(</span>faces<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&gt;</span> <span class="ansi-cyan-fg">0</span>
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/PIL/Image.py</span> in <span class="ansi-cyan-fg">open</span><span class="ansi-blue-fg">(fp, mode)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2578</span> 
+<span class="ansi-green-intense-fg ansi-bold">   2579</span>     <span class="ansi-green-fg">if</span> filename<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">-&gt; 2580</span><span class="ansi-red-fg">         </span>fp <span class="ansi-blue-fg">=</span> builtins<span class="ansi-blue-fg">.</span>open<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;rb&#34;</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   2581</span>         exclusive_fp <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span>
+<span class="ansi-green-intense-fg ansi-bold">   2582</span> 
 
-<span class="ansi-red-fg">error</span>: /tmp/build/80754af9/opencv_1512491964794/work/modules/imgproc/src/color.cpp:11048: error: (-215) scn == 3 || scn == 4 in function cvtColor
-</pre>
+<span class="ansi-red-fg">IsADirectoryError</span>: [Errno 21] Is a directory: &#39;test/&#39;</pre>
 </div>
 </div>
 
