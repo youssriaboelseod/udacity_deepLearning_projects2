@@ -13474,7 +13474,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:10&lt;00:00, 53886644.99it/s]
+100%|██████████| 553433881/553433881 [00:08&lt;00:00, 69092556.53it/s]
 </pre>
 </div>
 </div>
@@ -13609,7 +13609,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 <p><strong>Answer:</strong></p>
 <ul>
 <li>percentage of the first 100 images in human_files is 0.0 % have a detected dog face</li>
-<li>answer:percentage of the first 100 images in dog_files is 79 % have a detected dog face</li>
+<li>answer:percentage of the first 100 images in dog_files is 82 % have a detected dog face</li>
 </ul>
 
 </div>
@@ -13651,9 +13651,9 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
-78
-percentage of the first 100 images in dog_files is 0.78 % have a detected dog face
+<pre>percentage of the first 100 images in human_files is 0.02 % have a detected dog face
+84
+percentage of the first 100 images in dog_files is 0.84 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -14030,7 +14030,7 @@ percentage of the first 100 images in dog_files is 0.78 % have a detected dog fa
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.872725 	Validation Loss: 4.836059
+<pre>Epoch: 1 	Training Loss: 4.877899 	Validation Loss: 4.857875
 model_scratch Net(
   (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -14107,10 +14107,10 @@ model_scratch Net(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.862765
+<pre>Test Loss: 4.872818
 
 
-Test Accuracy:  1% (16/836)
+Test Accuracy:  1% (10/836)
 </pre>
 </div>
 </div>
@@ -14406,7 +14406,7 @@ To avoid overfitting on the small data set, the weights of the original network 
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model </span>
 <span class="c1">#ebouch 1 get 58%(train epoch=1) accuracy for epoch train 1  , epoch 2 get 75% accuracey for train epoch=1 , epoch2 get 72% accuracy for train epoch =2</span>
 
-<span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
+<span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
                       <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">)</span>
                 <span class="c1"># =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, &#39;model_transfer.pt&#39;)</span>
 
@@ -14428,8 +14428,7 @@ To avoid overfitting on the small data set, the weights of the original network 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.191793 	Validation Loss: 1.794680
-Epoch: 2 	Training Loss: 2.598694 	Validation Loss: 0.835083
+<pre>Epoch: 1 	Training Loss: 4.217209 	Validation Loss: 1.840667
 </pre>
 </div>
 </div>
@@ -14468,10 +14467,10 @@ Epoch: 2 	Training Loss: 2.598694 	Validation Loss: 0.835083
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 0.810230
+<pre>Test Loss: 1.909163
 
 
-Test Accuracy: 75% (628/836)
+Test Accuracy: 58% (492/836)
 </pre>
 </div>
 </div>
@@ -14490,25 +14489,30 @@ Test Accuracy: 75% (628/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write a function that takes a path to an image as input</span>
 <span class="c1">### and returns the dog breed that is predicted by the model.</span>
 
-<span class="c1"># list of class names by index, i.e. a name can be accessed like class_names[0]</span>
+<span class="c1"># list of class names by index, i.e. a name can be accessed like class_names[0</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="k">import</span> <span class="n">ImageFile</span>
+
+<span class="n">ImageFile</span><span class="o">.</span><span class="n">LOAD_TRUNCATED_IMAGES</span> <span class="o">=</span> <span class="kc">True</span>
+
 <span class="n">class_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data_transfer</span><span class="o">.</span><span class="n">classes</span><span class="p">]</span>
 
 <span class="k">def</span> <span class="nf">predict_breed_transfer</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load the image and return the predicted breed</span>
     <span class="c1"># obtain one batch of test images</span>
   
-    
-    <span class="n">dataiter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">loaders_transfer</span><span class="p">,</span><span class="n">class_names</span><span class="p">)</span>
-    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">dataiter</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
-    <span class="n">images</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+    <span class="c1">#dataiter = iter(loaders_transfer,class_names)</span>
+    <span class="c1">#images, labels = dataiter.next()</span>
+    <span class="c1">#images.numpy()</span>
 
-    <span class="c1">#img_tensor = train_transforms(img_path)[:3,:,:].unsqueeze(0)</span>
+    <span class="n">img_tensor</span> <span class="o">=</span> <span class="n">train_transforms</span><span class="p">(</span><span class="n">img_path</span><span class="p">)[:</span><span class="mi">3</span><span class="p">,:,:]</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
     <span class="c1">#img_tensor = img_tensor.reshape(3,224,224)</span>
     <span class="c1"># 2: Output of step 1 is a vector which is taken as an input for fully connected layer.</span>
     
@@ -14554,7 +14558,7 @@ Test Accuracy: 75% (628/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write your algorithm.</span>
@@ -14562,8 +14566,8 @@ Test Accuracy: 75% (628/836)
 
 <span class="k">def</span> <span class="nf">run_app</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load filenames for human and dog images</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
-    <span class="c1">#images = Image.open(img_path)</span>
+    <span class="c1">#images = np.array(glob(img_path))</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
     <span class="c1">## handle cases for a human face, dog, and neither</span>
     
     <span class="k">if</span> <span class="n">face_detector</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>      
@@ -14613,23 +14617,21 @@ i havn't the same numbers of images &gt;&gt; so i must re fix the test of the di
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>
 <span class="c1">## at least 6 images on your computer.</span>
 <span class="c1">## Feel free to use as many code cells as needed.</span>
-<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;test/*&quot;</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are </span><span class="si">%d</span><span class="s1"> total images.&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">))</span>
+<span class="c1">#test = np.array(glob(&quot;test/*&quot;))</span>
+<span class="c1">#print(&#39;There are %d total images.&#39; % len(test))</span>
+<span class="c1">#for i in test:</span>
+    
+<span class="c1">#    run_app(i)</span>
 
 <span class="c1">## suggested code, below</span>
-<span class="c1">#for file in np.hstack((human_files[:3], dog_files[:3])):</span>
-    <span class="c1">#run_app(file)</span>
-
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">test</span><span class="p">:</span>
-    
-    <span class="n">run_app</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">human_files</span><span class="p">[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">dog_files</span><span class="p">[:</span><span class="mi">3</span><span class="p">])):</span>
+    <span class="n">run_app</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14645,34 +14647,52 @@ i havn't the same numbers of images &gt;&gt; so i must re fix the test of the di
     <div class="prompt"></div>
 
 
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>There are 7 total images.
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
 <div class="output_subarea output_text output_error">
 <pre>
 <span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">IndexError</span>                                Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-25-ec1c20a3f4f0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> test<span class="ansi-blue-fg">:</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-27-6dec7f218c46&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-red-fg">## suggested code, below</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span> <span class="ansi-green-fg">for</span> file <span class="ansi-green-fg">in</span> np<span class="ansi-blue-fg">.</span>hstack<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">(</span>human_files<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">,</span> dog_files<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 12</span><span class="ansi-red-fg">     </span>run_app<span class="ansi-blue-fg">(</span>file<span class="ansi-blue-fg">)</span>
 <span class="ansi-green-intense-fg ansi-bold">     13</span> 
-<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">     </span>run_app<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span>
 
-<span class="ansi-green-fg">&lt;ipython-input-24-90261a2f53b9&gt;</span> in <span class="ansi-cyan-fg">run_app</span><span class="ansi-blue-fg">(img_path)</span>
+<span class="ansi-green-fg">&lt;ipython-input-22-82c6c6ca18d1&gt;</span> in <span class="ansi-cyan-fg">run_app</span><span class="ansi-blue-fg">(img_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> 
+<span class="ansi-green-intense-fg ansi-bold">     10</span>     <span class="ansi-green-fg">if</span> face_detector<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 11</span><span class="ansi-red-fg">         </span>print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;hi human you are like &#34;</span><span class="ansi-blue-fg">,</span>predict_breed_transfer<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span>         <span class="ansi-red-fg"># display the image, along with bounding box</span>
 <span class="ansi-green-intense-fg ansi-bold">     13</span>         plt<span class="ansi-blue-fg">.</span>imshow<span class="ansi-blue-fg">(</span>images<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     14</span>         plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-fg">---&gt; 15</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">elif</span>  dog_detector<span class="ansi-blue-fg">(</span>images<span class="ansi-blue-fg">[</span>D<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     16</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;hi Dog you are like &#34;</span><span class="ansi-blue-fg">,</span>predict_breed_transfer<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">     17</span>         <span class="ansi-red-fg"># display the image, along with bounding box</span>
 
-<span class="ansi-red-fg">IndexError</span>: index 99 is out of bounds for axis 0 with size 1</pre>
+<span class="ansi-green-fg">&lt;ipython-input-26-5541352d3427&gt;</span> in <span class="ansi-cyan-fg">predict_breed_transfer</span><span class="ansi-blue-fg">(img_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">     18</span>     <span class="ansi-red-fg">#images.numpy()</span>
+<span class="ansi-green-intense-fg ansi-bold">     19</span> 
+<span class="ansi-green-fg">---&gt; 20</span><span class="ansi-red-fg">     </span>img_tensor <span class="ansi-blue-fg">=</span> train_transforms<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">:</span><span class="ansi-cyan-fg">3</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">,</span><span class="ansi-blue-fg">:</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">.</span>unsqueeze<span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     21</span> 
+<span class="ansi-green-intense-fg ansi-bold">     22</span>     <span class="ansi-red-fg">#img_tensor = img_tensor.reshape(3,224,224)</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/torchvision-0.2.1-py3.6.egg/torchvision/transforms/transforms.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, img)</span>
+<span class="ansi-green-intense-fg ansi-bold">     47</span>     <span class="ansi-green-fg">def</span> __call__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> img<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     48</span>         <span class="ansi-green-fg">for</span> t <span class="ansi-green-fg">in</span> self<span class="ansi-blue-fg">.</span>transforms<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 49</span><span class="ansi-red-fg">             </span>img <span class="ansi-blue-fg">=</span> t<span class="ansi-blue-fg">(</span>img<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     50</span>         <span class="ansi-green-fg">return</span> img
+<span class="ansi-green-intense-fg ansi-bold">     51</span> 
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/torchvision-0.2.1-py3.6.egg/torchvision/transforms/transforms.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, img)</span>
+<span class="ansi-green-intense-fg ansi-bold">    173</span>             PIL Image<span class="ansi-blue-fg">:</span> Rescaled image<span class="ansi-blue-fg">.</span>
+<span class="ansi-green-intense-fg ansi-bold">    174</span>         &#34;&#34;&#34;
+<span class="ansi-green-fg">--&gt; 175</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> F<span class="ansi-blue-fg">.</span>resize<span class="ansi-blue-fg">(</span>img<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>size<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>interpolation<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    176</span> 
+<span class="ansi-green-intense-fg ansi-bold">    177</span>     <span class="ansi-green-fg">def</span> __repr__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/torchvision-0.2.1-py3.6.egg/torchvision/transforms/functional.py</span> in <span class="ansi-cyan-fg">resize</span><span class="ansi-blue-fg">(img, size, interpolation)</span>
+<span class="ansi-green-intense-fg ansi-bold">    187</span>     &#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    188</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> _is_pil_image<span class="ansi-blue-fg">(</span>img<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 189</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> TypeError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;img should be PIL Image. Got {}&#39;</span><span class="ansi-blue-fg">.</span>format<span class="ansi-blue-fg">(</span>type<span class="ansi-blue-fg">(</span>img<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    190</span>     <span class="ansi-green-fg">if</span> <span class="ansi-green-fg">not</span> <span class="ansi-blue-fg">(</span>isinstance<span class="ansi-blue-fg">(</span>size<span class="ansi-blue-fg">,</span> int<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">or</span> <span class="ansi-blue-fg">(</span>isinstance<span class="ansi-blue-fg">(</span>size<span class="ansi-blue-fg">,</span> collections<span class="ansi-blue-fg">.</span>Iterable<span class="ansi-blue-fg">)</span> <span class="ansi-green-fg">and</span> len<span class="ansi-blue-fg">(</span>size<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">==</span> <span class="ansi-cyan-fg">2</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    191</span>         <span class="ansi-green-fg">raise</span> TypeError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#39;Got inappropriate size arg: {}&#39;</span><span class="ansi-blue-fg">.</span>format<span class="ansi-blue-fg">(</span>size<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">TypeError</span>: img should be PIL Image. Got &lt;class &#39;numpy.str_&#39;&gt;</pre>
 </div>
 </div>
 
