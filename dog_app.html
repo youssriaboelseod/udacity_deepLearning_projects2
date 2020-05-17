@@ -13474,7 +13474,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:05&lt;00:00, 100720545.04it/s]
+100%|██████████| 553433881/553433881 [00:10&lt;00:00, 53886644.99it/s]
 </pre>
 </div>
 </div>
@@ -13652,8 +13652,8 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
-68
-percentage of the first 100 images in dog_files is 0.68 % have a detected dog face
+78
+percentage of the first 100 images in dog_files is 0.78 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -14009,7 +14009,7 @@ percentage of the first 100 images in dog_files is 0.68 % have a detected dog fa
     <span class="k">return</span> <span class="n">model</span>
 
 <span class="c1"># train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy the epoch shold be 30 epoch</span>
-<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
+<span class="n">model_scratch</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">loaders_scratch</span><span class="p">,</span> <span class="n">model_scratch</span><span class="p">,</span> <span class="n">optimizer_scratch</span><span class="p">,</span> 
                       <span class="n">criterion_scratch</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_scratch.pt&#39;</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;model_scratch&quot;</span><span class="p">,</span><span class="n">model_scratch</span><span class="p">)</span>
 <span class="c1"># load the model that got the best validation accuracy</span>
@@ -14030,8 +14030,7 @@ percentage of the first 100 images in dog_files is 0.68 % have a detected dog fa
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.874877 	Validation Loss: 4.853147
-Epoch: 2 	Training Loss: 4.833347 	Validation Loss: 4.812926
+<pre>Epoch: 1 	Training Loss: 4.872725 	Validation Loss: 4.836059
 model_scratch Net(
   (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -14108,10 +14107,10 @@ model_scratch Net(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.824402
+<pre>Test Loss: 4.862765
 
 
-Test Accuracy:  2% (24/836)
+Test Accuracy:  1% (16/836)
 </pre>
 </div>
 </div>
@@ -14429,8 +14428,8 @@ To avoid overfitting on the small data set, the weights of the original network 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.200653 	Validation Loss: 1.793048
-Epoch: 2 	Training Loss: 2.615075 	Validation Loss: 0.870445
+<pre>Epoch: 1 	Training Loss: 4.191793 	Validation Loss: 1.794680
+Epoch: 2 	Training Loss: 2.598694 	Validation Loss: 0.835083
 </pre>
 </div>
 </div>
@@ -14469,10 +14468,10 @@ Epoch: 2 	Training Loss: 2.615075 	Validation Loss: 0.870445
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 0.862609
+<pre>Test Loss: 0.810230
 
 
-Test Accuracy: 72% (603/836)
+Test Accuracy: 75% (628/836)
 </pre>
 </div>
 </div>
@@ -14555,7 +14554,7 @@ Test Accuracy: 72% (603/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write your algorithm.</span>
@@ -14563,8 +14562,8 @@ Test Accuracy: 72% (603/836)
 
 <span class="k">def</span> <span class="nf">run_app</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>
     <span class="c1"># load filenames for human and dog images</span>
-    <span class="c1">#images = np.array(glob(img_path))</span>
-    <span class="n">images</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">img_path</span><span class="p">)</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="n">img_path</span><span class="p">))</span>
+    <span class="c1">#images = Image.open(img_path)</span>
     <span class="c1">## handle cases for a human face, dog, and neither</span>
     
     <span class="k">if</span> <span class="n">face_detector</span><span class="p">(</span><span class="n">img_path</span><span class="p">):</span>      
@@ -14614,7 +14613,7 @@ i havn't the same numbers of images &gt;&gt; so i must re fix the test of the di
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>
@@ -14647,8 +14646,33 @@ i havn't the same numbers of images &gt;&gt; so i must re fix the test of the di
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>There are 0 total images.
+<pre>There are 7 total images.
 </pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">IndexError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-25-ec1c20a3f4f0&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> test<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span> 
+<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">     </span>run_app<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">&lt;ipython-input-24-90261a2f53b9&gt;</span> in <span class="ansi-cyan-fg">run_app</span><span class="ansi-blue-fg">(img_path)</span>
+<span class="ansi-green-intense-fg ansi-bold">     13</span>         plt<span class="ansi-blue-fg">.</span>imshow<span class="ansi-blue-fg">(</span>images<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     14</span>         plt<span class="ansi-blue-fg">.</span>show<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 15</span><span class="ansi-red-fg">     </span><span class="ansi-green-fg">elif</span>  dog_detector<span class="ansi-blue-fg">(</span>images<span class="ansi-blue-fg">[</span>D<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     16</span>         print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;hi Dog you are like &#34;</span><span class="ansi-blue-fg">,</span>predict_breed_transfer<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">     17</span>         <span class="ansi-red-fg"># display the image, along with bounding box</span>
+
+<span class="ansi-red-fg">IndexError</span>: index 99 is out of bounds for axis 0 with size 1</pre>
 </div>
 </div>
 
