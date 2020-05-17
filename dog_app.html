@@ -13474,7 +13474,7 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stderr output_text">
 <pre>Downloading: &#34;https://download.pytorch.org/models/vgg16-397923af.pth&#34; to /root/.torch/models/vgg16-397923af.pth
-100%|██████████| 553433881/553433881 [00:13&lt;00:00, 40105255.00it/s] 
+100%|██████████| 553433881/553433881 [00:05&lt;00:00, 100720545.04it/s]
 </pre>
 </div>
 </div>
@@ -13652,8 +13652,8 @@ percentage of the first 100 images in dog_files is 0.17 % have a detected human 
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>percentage of the first 100 images in human_files is 0.0 % have a detected dog face
-80
-percentage of the first 100 images in dog_files is 0.8 % have a detected dog face
+68
+percentage of the first 100 images in dog_files is 0.68 % have a detected dog face
 </pre>
 </div>
 </div>
@@ -14030,7 +14030,8 @@ percentage of the first 100 images in dog_files is 0.8 % have a detected dog fac
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.877770 	Validation Loss: 4.857650
+<pre>Epoch: 1 	Training Loss: 4.874877 	Validation Loss: 4.853147
+Epoch: 2 	Training Loss: 4.833347 	Validation Loss: 4.812926
 model_scratch Net(
   (conv1): Conv2d(3, 16, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
   (conv2): Conv2d(16, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
@@ -14107,10 +14108,10 @@ model_scratch Net(
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 4.877267
+<pre>Test Loss: 4.824402
 
 
-Test Accuracy:  1% (10/836)
+Test Accuracy:  2% (24/836)
 </pre>
 </div>
 </div>
@@ -14404,7 +14405,7 @@ To avoid overfitting on the small data set, the weights of the original network 
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train the model </span>
-<span class="c1">#ebouch 1 get 58%(train epoch=1) accuracy for epoch train 1  , epoch 2 get 75% accuracey for train epoch=2</span>
+<span class="c1">#ebouch 1 get 58%(train epoch=1) accuracy for epoch train 1  , epoch 2 get 75% accuracey for train epoch=1 , epoch2 get 72% accuracy for train epoch =2</span>
 
 <span class="n">model_transfer</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">loaders_transfer</span><span class="p">,</span> <span class="n">model_transfer</span><span class="p">,</span> <span class="n">optimizer_transfer</span><span class="p">,</span> 
                       <span class="n">criterion_transfer</span><span class="p">,</span> <span class="n">use_cuda</span><span class="p">,</span> <span class="s1">&#39;model_transfer.pt&#39;</span><span class="p">)</span>
@@ -14428,8 +14429,8 @@ To avoid overfitting on the small data set, the weights of the original network 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Epoch: 1 	Training Loss: 4.229452 	Validation Loss: 1.860316
-Epoch: 2 	Training Loss: 2.662923 	Validation Loss: 0.817756
+<pre>Epoch: 1 	Training Loss: 4.200653 	Validation Loss: 1.793048
+Epoch: 2 	Training Loss: 2.615075 	Validation Loss: 0.870445
 </pre>
 </div>
 </div>
@@ -14468,10 +14469,10 @@ Epoch: 2 	Training Loss: 2.662923 	Validation Loss: 0.817756
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Test Loss: 0.825005
+<pre>Test Loss: 0.862609
 
 
-Test Accuracy: 75% (634/836)
+Test Accuracy: 72% (603/836)
 </pre>
 </div>
 </div>
@@ -14554,7 +14555,7 @@ Test Accuracy: 75% (634/836)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### TODO: Write your algorithm.</span>
@@ -14613,13 +14614,13 @@ i havn't the same numbers of images &gt;&gt; so i must re fix the test of the di
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## TODO: Execute your algorithm from Step 6 on</span>
 <span class="c1">## at least 6 images on your computer.</span>
 <span class="c1">## Feel free to use as many code cells as needed.</span>
-<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;test/&quot;</span><span class="p">))</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;test/*&quot;</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are </span><span class="si">%d</span><span class="s1"> total images.&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">))</span>
 
 <span class="c1">## suggested code, below</span>
@@ -14646,40 +14647,8 @@ i havn't the same numbers of images &gt;&gt; so i must re fix the test of the di
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>There are 1 total images.
+<pre>There are 0 total images.
 </pre>
-</div>
-</div>
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">IsADirectoryError</span>                         Traceback (most recent call last)
-<span class="ansi-green-fg">&lt;ipython-input-29-4c513a558e37&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
-<span class="ansi-green-intense-fg ansi-bold">     12</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> test<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-intense-fg ansi-bold">     13</span> 
-<span class="ansi-green-fg">---&gt; 14</span><span class="ansi-red-fg">     </span>run_app<span class="ansi-blue-fg">(</span>i<span class="ansi-blue-fg">)</span>
-
-<span class="ansi-green-fg">&lt;ipython-input-24-82c6c6ca18d1&gt;</span> in <span class="ansi-cyan-fg">run_app</span><span class="ansi-blue-fg">(img_path)</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     <span class="ansi-red-fg"># load filenames for human and dog images</span>
-<span class="ansi-green-intense-fg ansi-bold">      6</span>     <span class="ansi-red-fg">#images = np.array(glob(img_path))</span>
-<span class="ansi-green-fg">----&gt; 7</span><span class="ansi-red-fg">     </span>images <span class="ansi-blue-fg">=</span> Image<span class="ansi-blue-fg">.</span>open<span class="ansi-blue-fg">(</span>img_path<span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">      8</span>     <span class="ansi-red-fg">## handle cases for a human face, dog, and neither</span>
-<span class="ansi-green-intense-fg ansi-bold">      9</span> 
-
-<span class="ansi-green-fg">/opt/conda/lib/python3.6/site-packages/PIL/Image.py</span> in <span class="ansi-cyan-fg">open</span><span class="ansi-blue-fg">(fp, mode)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2578</span> 
-<span class="ansi-green-intense-fg ansi-bold">   2579</span>     <span class="ansi-green-fg">if</span> filename<span class="ansi-blue-fg">:</span>
-<span class="ansi-green-fg">-&gt; 2580</span><span class="ansi-red-fg">         </span>fp <span class="ansi-blue-fg">=</span> builtins<span class="ansi-blue-fg">.</span>open<span class="ansi-blue-fg">(</span>filename<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#34;rb&#34;</span><span class="ansi-blue-fg">)</span>
-<span class="ansi-green-intense-fg ansi-bold">   2581</span>         exclusive_fp <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span>
-<span class="ansi-green-intense-fg ansi-bold">   2582</span> 
-
-<span class="ansi-red-fg">IsADirectoryError</span>: [Errno 21] Is a directory: &#39;test/&#39;</pre>
 </div>
 </div>
 
