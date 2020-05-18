@@ -134,13 +134,17 @@ def face_detector(img_path):
 # ### (IMPLEMENTATION) Assess the Human Face Detector
 # 
 # __Question 1:__ Use the code cell below to test the performance of the `face_detector` function.  
-# - What percentage of the first 100 images in `human_files` have a detected human face?  
+# - What percentage of the first 100 images in `human_files` have a detected human face? 
+# 
 # - What percentage of the first 100 images in `dog_files` have a detected human face? 
+# 
 # 
 # Ideally, we would like 100% of human images with a detected face and 0% of dog images with a detected face.  You will see that our algorithm falls short of this goal, but still gives acceptable performance.  We extract the file paths for the first 100 images from each of the datasets and store them in the numpy arrays `human_files_short` and `dog_files_short`.
 
 # __Answer:__ 
 # (You can print out your results and/or write your percentages in this cell)
+# -percentage of the first 100 images in human_files is 0.98 % have a detected human face
+# -percentage of the first 100 images in dog_files is 0.17 % have a detected human face
 
 # In[4]:
 
@@ -291,9 +295,14 @@ def dog_detector(img_path):
 # 
 # __Question 2:__ Use the code cell below to test the performance of your `dog_detector` function.  
 # - What percentage of the images in `human_files_short` have a detected dog?  
+# 
 # - What percentage of the images in `dog_files_short` have a detected dog?
+# 
 
 # __Answer:__ 
+# - percentage of the first 100 images in human_files is 0.0 % have a detected dog face
+# - answer:percentage of the first 100 images in dog_files is 82 % have a detected dog face
+# 
 # 
 
 # In[9]:
@@ -411,6 +420,9 @@ loaders_scratch['test'] = testloader
 # 
 
 # **Answer**:
+# - my code resize the images by cropping the input size of tensor is 224*224 for reduce size size  of image pixel by crop idges
+# - yes i augment the dataset throgh transforms
+# 
 
 # ### (IMPLEMENTATION) Model Architecture
 # 
@@ -466,6 +478,12 @@ if use_cuda:
 # __Question 4:__ Outline the steps you took to get to your final CNN architecture and your reasoning at each step.  
 
 # __Answer:__ 
+# 0-we tack data loaders as input as three separate data loaders for the training, validation, and test datasets after transform it ( for set random transformation for control object in image)
+# 1- i create 3 convolutional layers (for take input by kernal filter
+# 2- then create 2 linear layers (to increase the depth of previous layers)
+# 3- create pooling layer (for reduce size of layers)
+# 4- create fully connected layers by create relu functions by forward function ( to flatten layers to one vector)
+# 
 
 # ### (IMPLEMENTATION) Specify Loss Function and Optimizer
 # 
@@ -556,8 +574,8 @@ def train(n_epochs, loaders, model, optimizer, criterion, use_cuda, save_path):
     # return trained model
     return model
 
-# train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy
-model_scratch = train(1, loaders_scratch, model_scratch, optimizer_scratch, 
+# train the model #2 eboch get 2% accuracy and 12 eboch get 5% accuracy the epoch shold be 30 epoch
+model_scratch = train(30, loaders_scratch, model_scratch, optimizer_scratch, 
                       criterion_scratch, use_cuda, 'model_scratch.pt')
 print ("model_scratch",model_scratch)
 # load the model that got the best validation accuracy
@@ -725,7 +743,26 @@ print("model_transfer",model_transfer)
 # __Question 5:__ Outline the steps you took to get to your final CNN architecture and your reasoning at each step.  Describe why you think the architecture is suitable for the current problem.
 
 # __Answer:__ 
+# 1- we tack previous data loaders inputs after rename some of varibles ( three separate data loaders for the training, validation, and test datasets).
 # 
+# 2-create model_transfer through passing to vgg16 ( for transfer learning form vgg16 model).
+# 
+# 3-stood up parameters in model transfer ( to apilty to exceluding any layers we want in next steps.
+# 
+# 
+# ______the reason of previous step as follwing
+# 
+# we apply transfer learning as Case 1: Small Data Set, Similar Data
+# 
+# slice off the end of the neural network.
+# 
+# add a new fully connected layer that matches the number of classes in the new data set randomize the weights of the new fully connected layer; 
+# freeze all the weights from the pre-trained network
+# 
+# train the network to update the weights of the new fully connected layer.
+# To avoid overfitting on the small data set, the weights of the original network will be held constant rather than re-training the weights.
+# 
+# Since the data sets are similar, images from each data set will have similar higher level features. Therefore most or all of the pre-trained neural network layers already contain relevant information about the new data set and should be kept.
 
 # ### (IMPLEMENTATION) Specify Loss Function and Optimizer
 # 
@@ -748,8 +785,9 @@ optimizer_transfer = optim.SGD(model_transfer.classifier.parameters(),lr=0.001,m
 
 
 # train the model 
-#ebouch 1 get 58% accuracy must to be 2 ebochs at list
-model_transfer = train(1, loaders_transfer, model_transfer, optimizer_transfer, 
+#ebouch 1 get 58%(train epoch=1) accuracy for epoch train 1  , epoch 2 get 75% accuracey for train epoch=1 , epoch2 get 72% accuracy for train epoch =2
+
+model_transfer = train(5, loaders_transfer, model_transfer, optimizer_transfer, 
                       criterion_transfer, use_cuda, 'model_transfer.pt')
                 # =train(n_epochs, loaders_transfer, model_transfer, optimizer_transfer, criterion_transfer, use_cuda, 'model_transfer.pt')
 
@@ -777,19 +815,26 @@ test(loaders_transfer, model_transfer, criterion_transfer, use_cuda)
 ### TODO: Write a function that takes a path to an image as input
 ### and returns the dog breed that is predicted by the model.
 
-# list of class names by index, i.e. a name can be accessed like class_names[0]
+# list of class names by index, i.e. a name can be accessed like class_names[0
+from PIL import ImageFile
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 class_names = [item[4:].replace("_", " ") for item in data_transfer.classes]
 
 def predict_breed_transfer(img_path):
     # load the image and return the predicted breed
     # obtain one batch of test images
   
-    
-    dataiter = iter(loaders_transfer,class_names)
-    images, labels = dataiter.next()
-    images.numpy()
+    #images = Image.open(img_path)
+    images = Image.open(img_path).convert('RGB')
 
-    #img_tensor = train_transforms(img_path)[:3,:,:].unsqueeze(0)
+    #dataiter = iter(loaders_transfer,class_names)
+    #images, labels = dataiter.next()
+    #images.numpy()
+ 
+    img_tensor = test_transforms(images)[:3,:,:].unsqueeze(0)
+    
     #img_tensor = img_tensor.reshape(3,224,224)
     # 2: Output of step 1 is a vector which is taken as an input for fully connected layer.
     
@@ -798,10 +843,12 @@ def predict_breed_transfer(img_path):
         with torch.no_grad():
                 model_transfer.eval()
     # get sample outputs
-    output = model_transfer(images)
+    output = model_transfer(img_tensor)
     # convert output probabilities to predicted class
-    _, preds_tensor = torch.max(output, 1)
-    prediction = np.squeeze(preds_tensor.numpy()) if not train_on_gpu else np.squeeze(preds_tensor.cpu().numpy())
+    #_, preds_tensor = torch.max(output, 1)
+    #prediction = np.squeeze(preds_tensor.numpy()) #if not train_on_gpu else 
+    #np.squeeze(preds_tensor.cpu().numpy())
+    prediction = torch.argmax(output).item()
 
   
         
@@ -836,40 +883,25 @@ def predict_breed_transfer(img_path):
 
 def run_app(img_path):
     # load filenames for human and dog images
-    images = np.array(glob(img_path))
-    
+    #images = np.array(glob(img_path))
+    images = Image.open(img_path).convert('RGB')
     ## handle cases for a human face, dog, and neither
     
-    for H in range(len(images)):
-        if face_detector(images[H]):      
-            face_cascade = cv2.CascadeClassifier('haarcascades/haarcascade_frontalface_alt.xml')
+    if face_detector(img_path):      
+        print("hi human you are like ",predict_breed_transfer(img_path))
+        # display the image, along with bounding box
+        plt.imshow(images)
+        plt.show()        
+    elif  dog_detector(img_path):      
+        print("hi Dog you are like ",predict_breed_transfer(img_path))
+        # display the image, along with bounding box
+        plt.imshow(images)
+        plt.show()        
 
-            # load color (BGR) image
-            img = cv2.imread(img_path[0])
-            # convert BGR image to grayscale
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            # find faces in image
-            faces = face_cascade.detectMultiScale(gray)
-
-            # print number of faces detected in the image
-            print('Number of faces detected:', len(faces))
-
-            # get bounding box for each detected face
-            for (x,y,w,h) in faces:
-                # add bounding box to color image
-                cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-
-            # convert BGR image to RGB for plotting
-            cv_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-            # display the image, along with bounding box
-            plt.imshow(cv_rgb)
-            plt.show()        
-        elif  dog_detector(images[D]):      
-            predict_breed_transfer(images)
-            
-        else:
-            print("we haven't find nither human or dog picture")
+    else:
+        print("we haven't find nither human or dog picture")
+        plt.imshow(images)
+        plt.show()  
 
 
 # ---
@@ -885,6 +917,13 @@ def run_app(img_path):
 # __Question 6:__ Is the output better than you expected :) ?  Or worse :( ?  Provide at least three possible points of improvement for your algorithm.
 
 # __Answer:__ (Three possible points for improvement)
+# some of bicture the model can't learn it 
+# 
+# the train of network is low accuracy in step3 >> so i should raise number of epochs
+# 
+# the details in images is not enopth >> so i should add new convolutional layer and more depth  and more pooling layer
+# 
+# the transfer learning train is low accuracy in step4 >> so i should raise number of epochs
 
 # In[23]:
 
@@ -892,14 +931,24 @@ def run_app(img_path):
 ## TODO: Execute your algorithm from Step 6 on
 ## at least 6 images on your computer.
 ## Feel free to use as many code cells as needed.
-test = np.array(glob("E:\programing\courses\deep_learning\deep-learning-v2-pytorch\project-dog-classification\data\test"))
+#test = np.array(glob("test/*"))
+#print('There are %d total images.' % len(test))
+#for i in test:
+    
+#    run_app(i)
 
 ## suggested code, below
-#for file in np.hstack((human_files[:3], dog_files[:3])):
-    #run_app(file)
+for file in np.hstack((human_files[:3], dog_files[:3])):
+    run_app(file)
 
 
-for i in test:
+
+# In[24]:
+
+
+test = np.array(glob("test/*"))
+print('There are %d total images.' % len(test))
+for i in test:    
     run_app(i)
 
 
